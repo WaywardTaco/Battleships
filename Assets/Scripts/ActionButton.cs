@@ -28,7 +28,11 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     void Update()
     {
         if(AssignedMove.CompareTo("") != 0){
-            _moveNameText.text = DataLoader.Instance.GetMoveData(AssignedMove).MoveName;
+            MoveData data = DataLoader.Instance.GetMoveData(AssignedMove);
+            if(data == null)
+                _moveNameText.text = "";
+            else
+                _moveNameText.text = data.MoveName;
         }
     }
 }
