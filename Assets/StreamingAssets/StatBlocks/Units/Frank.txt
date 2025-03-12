@@ -1,6 +1,9 @@
 {
   "UnitTag": "Frank",
   "UnitName": "Frank",
-  "SpriteList": [],
+  "SpriteList": [
+    "Frank.png",
+    "FrankBack.png"
+  ],
   "MoveList": []
 }

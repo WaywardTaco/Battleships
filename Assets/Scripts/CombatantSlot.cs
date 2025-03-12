@@ -1,22 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatantSlot : MonoBehaviour
 {
-    [SerializeField] private Sprite _unitSprite;
+    [SerializeField] private Image _unitSprite;
     [SerializeField] private Transform _forwardLocation;
     [SerializeField] private Transform _rearLocation;
 
     public void UpdateCombatant(Combatant combatant, bool isAlly = false){
         if(!isAlly){
-            _unitSprite = DataLoader.Instance.GetUnitSprite(
-                DataLoader.Instance.GetUnitData(combatant.UnitTag).SpriteList[0]
+            _unitSprite.sprite = DataLoader.Instance.GetUnitSprite(
+                combatant.Data.SpriteList[0]
             );
         } else {
-            _unitSprite = DataLoader.Instance.GetUnitSprite(
-                DataLoader.Instance.GetUnitData(combatant.UnitTag).SpriteList[1]
+            _unitSprite.sprite = DataLoader.Instance.GetUnitSprite(
+                combatant.Data.SpriteList[1]
             );
         }
 

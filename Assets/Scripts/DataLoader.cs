@@ -36,16 +36,16 @@ public class DataLoader : MonoBehaviour
         if(_spritesDict.ContainsKey(filename)) 
             return _spritesDict[filename];
 
-        string spritePath = Path.Combine(Application.streamingAssetsPath, UNIT_SPRITES_FILEPATH, filename);
+        string spritePath = Application.streamingAssetsPath + UNIT_SPRITES_FILEPATH + filename;
 
-        if(!Directory.Exists(spritePath)){
+        if(!File.Exists(spritePath)){
             Debug.LogWarning($"[WARN]: Trying to access non-existent sprite: \"{spritePath}\"");
             return null;
         }
 
         byte[] imageData = File.ReadAllBytes(spritePath);
 
-        Texture2D texture = new Texture2D(2,2);
+        Texture2D texture = new Texture2D(1,1,TextureFormat.ARGB32, false);
         texture.LoadImage(imageData);
 
         Sprite newSprite = Sprite.Create(
@@ -65,7 +65,7 @@ public class DataLoader : MonoBehaviour
         _loadedUnits.Clear();
         _unitDict.Clear();
 
-        DirectoryInfo unitDir = new DirectoryInfo(Application.streamingAssetsPath + UNIT_FILEPATH);
+        DirectoryInfo unitDir = new(Application.streamingAssetsPath + UNIT_FILEPATH);
         FileInfo[] unitFiles = unitDir.GetFiles();
         foreach(FileInfo file in unitFiles){
             if(Path.GetExtension(file.FullName) != ".txt") continue;
@@ -80,7 +80,7 @@ public class DataLoader : MonoBehaviour
             _unitDict.Add(unit.UnitTag, unit);
         }
 
-        Debug.Log($"[DEBUG]: Finished inputting unit files from \"{Application.streamingAssetsPath + UNIT_FILEPATH}\"");
+        // Debug.Log($"[DEBUG]: Finished inputting unit files from \"{Application.streamingAssetsPath + UNIT_FILEPATH}\"");
     }
     private void OutputUnits(){
         foreach(UnitData unit in _loadedUnits){
@@ -94,7 +94,7 @@ public class DataLoader : MonoBehaviour
             file.Close();
         }
 
-        Debug.Log($"[DEBUG]: Finished outputting unit files to \"{Application.streamingAssetsPath + UNIT_FILEPATH}\"");
+        // Debug.Log($"[DEBUG]: Finished outputting unit files to \"{Application.streamingAssetsPath + UNIT_FILEPATH}\"");
     }
 
     private void LoadMoves(){
