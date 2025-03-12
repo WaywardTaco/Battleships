@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class CombatPanel : MonoBehaviour
@@ -32,7 +33,11 @@ public class CombatPanel : MonoBehaviour
         }
         
         if(button.AssignedMove.CompareTo("") != 0){
-            _descriptionText.text = DataLoader.Instance.GetMoveData(button.AssignedMove).MoveDescription;
+            MoveData data = DataLoader.Instance.GetMoveData(button.AssignedMove);
+            if(data == null)
+                _descriptionText.text = "";
+            else
+                _descriptionText.text = data.MoveDescription;
         }
     }
 
