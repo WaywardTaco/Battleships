@@ -32,6 +32,12 @@ public class DataLoader : MonoBehaviour
         return _unitDict[unitTag];
     }
 
+    public MoveData GetMoveData(String moveTag){
+        if(!_movesDict.ContainsKey(moveTag)) return null;
+
+        return _movesDict[moveTag];
+    }
+
     public Sprite GetUnitSprite(String filename){
         if(_spritesDict.ContainsKey(filename)) 
             return _spritesDict[filename];
@@ -45,7 +51,7 @@ public class DataLoader : MonoBehaviour
 
         byte[] imageData = File.ReadAllBytes(spritePath);
 
-        Texture2D texture = new Texture2D(1,1,TextureFormat.ARGB32, false);
+        Texture2D texture = new(1,1,TextureFormat.ARGB32, false);
         texture.LoadImage(imageData);
 
         Sprite newSprite = Sprite.Create(
@@ -74,7 +80,7 @@ public class DataLoader : MonoBehaviour
             string importString = string.Join("", importLines);
 
             // Debug.Log($"[DEBUG]: Importing Unit \"{importString}\"");
-            UnitData unit = new UnitData();
+            UnitData unit = new();
             unit = JsonConvert.DeserializeObject<UnitData>(importString);
             _loadedUnits.Add(unit);
             _unitDict.Add(unit.UnitTag, unit);
@@ -101,7 +107,7 @@ public class DataLoader : MonoBehaviour
         _loadedMoves.Clear();
         _movesDict.Clear();
 
-        DirectoryInfo moveDir = new DirectoryInfo(Application.streamingAssetsPath + MOVES_FILEPATH);
+        DirectoryInfo moveDir = new(Application.streamingAssetsPath + MOVES_FILEPATH);
         FileInfo[] moveFiles = moveDir.GetFiles();
         foreach(FileInfo file in moveFiles){
             if(Path.GetExtension(file.FullName) != ".txt") continue;

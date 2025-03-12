@@ -5,5 +5,8 @@
     "Frank.png",
     "FrankBack.png"
   ],
-  "MoveList": []
+  "MoveList": [
+    "MoveA",
+    "MoveB"
+  ]
 }

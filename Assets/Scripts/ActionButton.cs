@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public MoveData AssignedMove;
+    public String AssignedMove = "";
 
     [SerializeField] private TMP_Text _moveNameText;
     [SerializeField] private TMP_Text _movePPText;
@@ -26,8 +27,8 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     void Update()
     {
-        if(AssignedMove != null){
-            _moveNameText.text = AssignedMove.MoveName;
+        if(AssignedMove.CompareTo("") != 0){
+            _moveNameText.text = DataLoader.Instance.GetMoveData(AssignedMove).MoveName;
         }
     }
 }

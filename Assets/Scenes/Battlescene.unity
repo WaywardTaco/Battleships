@@ -210,7 +210,7 @@ PrefabInstance:
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: AssignedMove
       value: 
-      objectReference: {fileID: 11400000, guid: c4439a83b984263468a684ebd059ba04, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: _assignedMove
       value: 
@@ -1025,7 +1025,7 @@ PrefabInstance:
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: AssignedMove
       value: 
-      objectReference: {fileID: 11400000, guid: 7d00c650f60aead4ab19d39af0cd6d1d, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: _assignedMove
       value: 
@@ -1537,7 +1537,7 @@ MonoBehaviour:
   UNIT_SPRITE_PIVOT: {x: 0.5, y: 0.5}
   UNIT_SPRITE_PIXELS_PER_UNIT: 100
   _debugLoadUnits: 1
-  _debugLoadMoves: 0
+  _debugLoadMoves: 1
   _debugOutputUnits: 0
   _debugOutputMoves: 0
   _loadedUnits:
@@ -1594,7 +1594,7 @@ MonoBehaviour:
   _turnCount: 0
   _processingUnitIndex: -1
   _combatCamera: {fileID: 100039829}
-  _combatPanel: {fileID: 1379900776}
+  _combatPanel: {fileID: 1379900780}
   _debugStartCombat: 0
   _debugEndCombat: 0
   _debugPlayerSubmitMove: 0
@@ -1655,6 +1655,7 @@ MonoBehaviour:
     SpeedStage: -3
     isInRear: 0
     HasDied: 0
+  _movingCombatants: []
 --- !u!1 &500571519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1848,7 +1849,7 @@ PrefabInstance:
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: AssignedMove
       value: 
-      objectReference: {fileID: 11400000, guid: b2ed6db59b307a34c9348b5ab5d647b9, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: _assignedMove
       value: 
@@ -2318,6 +2319,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _descriptionText: {fileID: 308345220}
+  _actionButtons:
+  - {fileID: 144923217}
+  - {fileID: 603306020}
+  - {fileID: 1755278178}
+  - {fileID: 55831010}
 --- !u!114 &1379900781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3066,7 +3072,7 @@ PrefabInstance:
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: AssignedMove
       value: 
-      objectReference: {fileID: 11400000, guid: 7934e52f2eb95a74fb98898b6e228506, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1681387452175057645, guid: c13867b9bfa20d34db525038f5eafd1f, type: 3}
       propertyPath: _assignedMove
       value: 

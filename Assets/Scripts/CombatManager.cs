@@ -10,7 +10,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private uint _turnCount = 0;
     [SerializeField] private int _processingUnitIndex = -1;
     [SerializeField] private CameraMover _combatCamera;
-    [SerializeField] private GameObject _combatPanel;
+    [SerializeField] private CombatPanel _combatPanel;
 
     private bool
         _turnPlaying = false,
@@ -38,7 +38,7 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        _combatPanel.SetActive(true);
+        _combatPanel.gameObject.SetActive(true);
         _roundCount = 1;
         UpdateSlots();
         StartCoroutine(PlayCombat());
@@ -108,6 +108,9 @@ public class CombatManager : MonoBehaviour
         _combatCamera.MoveCameraToSlot(
             "P" + (_turnCount + 1)
         );
+
+        UnitData unitData = DataLoader.Instance.GetUnitData(TurnUnit().UnitTag);
+        _combatPanel.LoadButtonInfo(unitData.MoveList);
 
         while(!ShouldTurnEnd()){
             yield return new WaitForEndOfFrame();
@@ -231,7 +234,7 @@ public class CombatManager : MonoBehaviour
     }
 
     private void Setup(){
-        _combatPanel.SetActive(false);
+        _combatPanel.gameObject.SetActive(false);
     }
 
     private void DebugUpdate(){
