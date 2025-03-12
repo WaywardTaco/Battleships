@@ -1,0 +1,12 @@
+{
+  "MoveTag": "MoveA",
+  "MoveName": "Jonthan frank",
+  "MoveDescription": "blah blah blah",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveSpread": "Single",
+  "MoveEffect": [],
+  "MovePower": 5,
+  "MoveCostBase": 12,
+  "MoveCostGrowthRate": 0.2
+}

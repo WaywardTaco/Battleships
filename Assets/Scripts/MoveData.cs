@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Move", menuName = "Scriptables/Move")]
-public class MoveScriptable : ScriptableObject
-{
+[Serializable] public class MoveData {
+    public String MoveTag;
     public String MoveName;
     public String MoveDescription;
     public String MoveKind;
@@ -15,8 +14,4 @@ public class MoveScriptable : ScriptableObject
     public int MovePower;
     public int MoveCostBase;
     public float MoveCostGrowthRate;
-
-    public void UseMove(){
-        Debug.Log($"[DEBUG]: I'm using {MoveName}");
-    }
 }

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public MoveScriptable AssignedMove;
+    public MoveData AssignedMove;
 
     [SerializeField] private TMP_Text _moveNameText;
     [SerializeField] private TMP_Text _movePPText;

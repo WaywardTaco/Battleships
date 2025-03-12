@@ -1,0 +1,6 @@
+{
+  "UnitTag": "Frank",
+  "UnitName": "Frank",
+  "SpriteList": [],
+  "MoveList": []
+}

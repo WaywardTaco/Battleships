@@ -9,7 +9,7 @@ public class CombatPanel : MonoBehaviour
 
     public void ActionButtonCallback(ActionButton button){
         if(button.AssignedMove != null){
-            button.AssignedMove.UseMove();
+            // button.AssignedMove.UseMove();
         }
     }
 

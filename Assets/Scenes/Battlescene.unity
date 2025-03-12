@@ -1345,6 +1345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 480761355}
   - component: {fileID: 480761354}
+  - component: {fileID: 480761356}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -1364,12 +1365,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e88bf3e7e8f056418c72adcffa86f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UNIT_FILEPATH: /StatBlocks/Units/
+  MOVES_FILEPATH: /StatBlocks/Moves/
+  UNIT_SPRITES_FILEPATH: /Sprites/Units/
+  UNIT_SPRITE_PIVOT: {x: 0.5, y: 0.5}
+  UNIT_SPRITE_PIXELS_PER_UNIT: 100
   _debugLoadUnits: 0
+  _debugLoadMoves: 0
   _debugOutputUnits: 0
-  _textfiles: []
+  _debugOutputMoves: 0
   _loadedUnits:
-  - {fileID: 11400000, guid: 87c6c5c3eb1aa9349807d131b2d9f5fd, type: 2}
-  - {fileID: 11400000, guid: d915f2ac7559e7b4bada898058565afb, type: 2}
+  - UnitTag: NotFrank
+    UnitName: Jimmy
+    SpriteList: []
+    MoveList: []
+  - UnitTag: Frank
+    UnitName: Frank
+    SpriteList: []
+    MoveList: []
+  _loadedMoves:
+  - MoveTag: MoveA
+    MoveName: Jonthan frank
+    MoveDescription: blah blah blah
+    MoveKind: Physical
+    MoveType: Slash
+    MoveSpread: Single
+    MoveEffect: []
+    MovePower: 5
+    MoveCostBase: 12
+    MoveCostGrowthRate: 0.2
+  _loadedSprites: []
 --- !u!4 &480761355
 Transform:
   m_ObjectHideFlags: 0
@@ -1385,6 +1410,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &480761356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480761353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10122b82641608c44a5776b87c4a78e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _combatPanel: {fileID: 1379900776}
+  _debugStartCombat: 0
+  _playerSlots: []
+  _enemySlots: []
+  _playerTeam: []
+  _enemyTeam: []
 --- !u!1 &500571519
 GameObject:
   m_ObjectHideFlags: 0
