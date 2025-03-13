@@ -9,7 +9,7 @@ using UnityEngine;
     public String MoveDescription;
     public String MoveKind;
     public String MoveType;
-    public String MoveSpread;
+    public List<String> MoveTargets;
     public List<String> MoveEffect = new();
     public int MovePower;
     public int MoveCostBase;

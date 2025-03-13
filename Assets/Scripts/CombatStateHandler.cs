@@ -61,7 +61,7 @@ public class CombatStateHandler : MonoBehaviour
         if(!MoveProcessor.Instance.HasValidTarget(TurnUnit())) return; 
 
         Debug.Log("[COMBAT]: Valid Target Submitted " + combatant);
-        TurnUnit().SubmittedTarget = combatant.UnitTag;
+        TurnUnit().SubmittedTarget = combatant;
     }
 
     public bool IsCombatActive(){
@@ -126,10 +126,12 @@ public class CombatStateHandler : MonoBehaviour
     protected void UpdateSlots(){
         int slotCount = _playerSlots.Count;
         for(int i = 0; i < slotCount && i < _playerTeam.Count; i++){
+            _playerTeam[i].isAlly = true;
             _playerSlots[i].UpdateCombatant(_playerTeam[i]);
         }
         slotCount = _enemySlots.Count;
         for(int i = 0; i < slotCount && i < _enemyTeam.Count; i++){
+            _enemyTeam[i].isAlly = false;
             _enemySlots[i].UpdateCombatant(_enemyTeam[i]);
         }
     }

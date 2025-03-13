@@ -1,12 +1,15 @@
 {
   "MoveTag": "MoveB",
-  "MoveName": "Jonthan frank ver 2",
-  "MoveDescription": "blah blah blah ver 2",
+  "MoveName": "Jonthan frank",
+  "MoveDescription": "blah blah blah",
   "MoveKind": "Physical",
   "MoveType": "Slash",
-  "MoveSpread": "Single",
+  "MoveTargets": [
+    "Single",
+    "Party"
+  ],
   "MoveEffect": [],
   "MovePower": 5,
-  "MoveCostBase": 10,
+  "MoveCostBase": 12,
   "MoveCostGrowthRate": 0.2
 }

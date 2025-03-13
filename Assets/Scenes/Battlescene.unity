@@ -1513,7 +1513,7 @@ MonoBehaviour:
   UNIT_SPRITE_PIVOT: {x: 0.5, y: 0.5}
   UNIT_SPRITE_PIXELS_PER_UNIT: 100
   _debugLoadUnits: 1
-  _debugLoadMoves: 1
+  _debugLoadMoves: 0
   _debugOutputUnits: 0
   _debugOutputMoves: 0
   _loadedUnits:
@@ -1526,14 +1526,30 @@ MonoBehaviour:
     SpriteList:
     - Frank.png
     - FrankBack.png
-    MoveList: []
+    MoveList:
+    - MoveA
+    - MoveB
+    - MoveA
+    - MoveB
   _loadedMoves:
   - MoveTag: MoveA
     MoveName: Jonthan frank
     MoveDescription: blah blah blah
     MoveKind: Physical
     MoveType: Slash
-    MoveSpread: Single
+    MoveTargets: []
+    MoveEffect: []
+    MovePower: 5
+    MoveCostBase: 12
+    MoveCostGrowthRate: 0.2
+  - MoveTag: MoveB
+    MoveName: Jonthan frank
+    MoveDescription: blah blah blah
+    MoveKind: Physical
+    MoveType: Slash
+    MoveTargets:
+    - Single
+    - Party
     MoveEffect: []
     MovePower: 5
     MoveCostBase: 12
@@ -1566,6 +1582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10122b82641608c44a5776b87c4a78e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraReturnTime: 0
   _roundCount: 0
   _turnCount: 0
   _processingUnitIndex: -1

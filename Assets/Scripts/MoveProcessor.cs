@@ -9,6 +9,11 @@ public class MoveProcessor : MonoBehaviour
     [SerializeField] private bool _debugEndProcessMove = false;
 
     public bool HasValidTarget(Combatant user){
+        MoveData data = DataLoader.Instance.GetMoveData(user.SubmittedMoveTag);
+        
+
+
+
         return true;
     }
 
@@ -18,7 +23,6 @@ public class MoveProcessor : MonoBehaviour
         IsProcessingMove = true;
         StartCoroutine(ProcessMove(user));
     }
-
     
     private IEnumerator ProcessMove(Combatant user){
         Debug.Log($"[COMBAT]: Processing {user.UnitTag}'s {user.SubmittedMoveTag} (Speed: {user.CurrentSpeed()})");

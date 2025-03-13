@@ -4,7 +4,7 @@
   "MoveDescription": "blah blah blah",
   "MoveKind": "Physical",
   "MoveType": "Slash",
-  "MoveSpread": "Single",
+  "MoveTargets": [],
   "MoveEffect": [],
   "MovePower": 5,
   "MoveCostBase": 12,

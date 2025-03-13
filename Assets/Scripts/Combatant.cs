@@ -12,6 +12,7 @@ using UnityEngine;
     public int CurrentStamina;
     public int SpeedStage;
     public bool isInRear;
+    public bool isAlly;
     public bool HasDied;
     public UnitData Data {
         get {
