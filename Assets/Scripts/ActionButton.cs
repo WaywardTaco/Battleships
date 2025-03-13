@@ -9,9 +9,10 @@ using UnityEngine.EventSystems;
 public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public String AssignedMove = "";
+    public int MoveCost = 0;
 
     [SerializeField] private TMP_Text _moveNameText;
-    [SerializeField] private TMP_Text _movePPText;
+    [SerializeField] private TMP_Text _moveCostText;
 
     public UnityEvent<ActionButton, bool> _HoverCallbackHandler;
 
@@ -29,10 +30,19 @@ public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if(AssignedMove.CompareTo("") != 0){
             MoveData data = DataLoader.Instance.GetMoveData(AssignedMove);
-            if(data == null)
+            if(data == null){
                 _moveNameText.text = "";
-            else
+                _moveCostText.text = "";
+                MoveCost = 0;
+            }
+            else{
                 _moveNameText.text = data.MoveName;
+                _moveCostText.text = $"{MoveCost}SP";
+            }
+        } else {
+            _moveNameText.text = "";
+            _moveCostText.text = "";
+            MoveCost = 0;
         }
     }
 }

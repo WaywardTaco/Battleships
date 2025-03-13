@@ -7,6 +7,6 @@
   "MoveSpread": "Single",
   "MoveEffect": [],
   "MovePower": 5,
-  "MoveCostBase": 12,
+  "MoveCostBase": 10,
   "MoveCostGrowthRate": 0.2
 }

@@ -18,14 +18,22 @@ public class CameraMover : MonoBehaviour
     [SerializeField] private List<BattlefieldCameraSlot> _cameraSlots = new();
     private Dictionary<String, BattlefieldCameraSlot> _cameraSlotDict = new();
 
-    public void MoveCameraToSlot(String SlotTag, float duration = -1){
-        if(_isMovingCamera) return;
+    public void MoveCameraToSlot(String SlotTag, bool priority = true, float duration = -1){
+        MoveCamTo(_cameraSlotDict[SlotTag].CamSlot, priority, duration);
+    }
+    public void MoveCamTo(Transform target, bool priority = true, float duration = -1){
+        if(_isMovingCamera && !priority){
+            return;
+        }
+        if(_isMovingCamera && priority){
+            StopAllCoroutines();
+        }
 
         _isMovingCamera = true;
 
         if(duration < 0){
-            float distance = Vector3.Distance(_cameraSlotDict[SlotTag].CamSlot.position, transform.position);
-            float rotDiff = Quaternion.Angle(_cameraSlotDict[SlotTag].CamSlot.rotation, transform.rotation);
+            float distance = Vector3.Distance(target.position, transform.position);
+            float rotDiff = Quaternion.Angle(target.rotation, transform.rotation);
             float moveDuration = distance / CAMERA_MOVE_RATE;
             float rotDuration = rotDiff / CAMERA_ROTATE_RATE;
             duration = moveDuration;
@@ -33,9 +41,10 @@ public class CameraMover : MonoBehaviour
                 duration = rotDuration;
         }
 
-        StartCoroutine(MoveCamTo(_cameraSlotDict[SlotTag].CamSlot, duration));
+        StartCoroutine(MoveCamToPos(target, duration));
     }
-    private IEnumerator MoveCamTo(Transform target, float duration){
+
+    private IEnumerator MoveCamToPos(Transform target, float duration){
         transform.GetPositionAndRotation(out Vector3 startPosition, out Quaternion startRotation);
         float progress = 0.0f;
         while(progress < duration){

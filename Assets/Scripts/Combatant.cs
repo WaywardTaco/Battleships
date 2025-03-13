@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable] public class Combatant {
     public string UnitTag;
     public string SubmittedMoveTag;
+    public string SubmittedTarget;
+    public int Level;
     public int CurrentHealth;
     public int CurrentStamina;
     public int SpeedStage;

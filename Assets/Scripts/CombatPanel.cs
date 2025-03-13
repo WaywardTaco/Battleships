@@ -12,17 +12,25 @@ public class CombatPanel : MonoBehaviour
 
     public void ActionButtonCallback(ActionButton button){
         if(button.AssignedMove.CompareTo("") != 0){
-            CombatManager.Instance.SubmitMove(button.AssignedMove);
+            CombatManager.Instance.SelectMove(button.AssignedMove);
         }
     }
 
-    public void LoadButtonInfo(List<String> moveTags){
+    public void LoadButtonInfo(Combatant combatant, List<String> moveTags){
         foreach(ActionButton button in _actionButtons){
             button.AssignedMove = "";
         }
 
         for(int i = 0; i < moveTags.Count && i < _actionButtons.Count; i++){
             _actionButtons[i].AssignedMove = moveTags[i];
+            
+            MoveData data = DataLoader.Instance.GetMoveData(moveTags[i]);
+            if(data != null){
+                _actionButtons[i].MoveCost 
+                    = data.MoveCostBase + (int)(combatant.Level * data.MoveCostGrowthRate);
+            } else {
+                _actionButtons[i].MoveCost = 0;
+            }
         }
     }   
 

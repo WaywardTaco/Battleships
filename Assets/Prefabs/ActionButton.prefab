@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8902421657228933087}
   - component: {fileID: 5313322297534946884}
   m_Layer: 5
-  m_Name: PPText
+  m_Name: CostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -476,9 +476,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a3c8990eb816249b229dd28adcf9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AssignedMove: {fileID: 0}
+  AssignedMove: 
+  MoveCost: 0
   _moveNameText: {fileID: 7988039538480188798}
-  _movePPText: {fileID: 8902421657228933087}
+  _moveCostText: {fileID: 8902421657228933087}
   _HoverCallbackHandler:
     m_PersistentCalls:
       m_Calls: []
