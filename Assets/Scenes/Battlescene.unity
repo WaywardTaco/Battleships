@@ -1520,8 +1520,8 @@ MonoBehaviour:
   UNIT_SPRITES_FILEPATH: /Sprites/Units/
   UNIT_SPRITE_PIVOT: {x: 0.5, y: 0.5}
   UNIT_SPRITE_PIXELS_PER_UNIT: 100
-  _debugLoadUnits: 0
-  _debugLoadMoves: 0
+  _debugLoadUnits: 1
+  _debugLoadMoves: 1
   _debugOutputUnits: 0
   _debugOutputMoves: 0
   _loadedUnits:
