@@ -1,12 +1,11 @@
 {
-  "MoveTag": "MoveA",
-  "MoveName": "Single/Self",
-  "MoveDescription": "Single/Self",
+  "MoveTag": "MoveC",
+  "MoveName": "Ally",
+  "MoveDescription": "Ally",
   "MoveKind": "Physical",
   "MoveType": "Slash",
   "MoveTargets": [
-    "Single",
-    "Self"
+    "Ally"
   ],
   "MoveEffect": [],
   "MovePower": 5,

@@ -4,17 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatStateHandler : MonoBehaviour
-{
-    
-    [Serializable] public class BattlefieldCameraSlot {
-        public String SlotTag;
-        public Transform CamSlot;
-    }
-    
+{   
     [SerializeField] private float _cameraReturnTime = 0;
-    [SerializeField] protected uint _roundCount = 0;
-    [SerializeField] protected uint _turnCount = 0;
-    [SerializeField] protected int _processingUnitIndex = -1;
+    protected uint _roundCount = 0;
+    protected uint _turnCount = 0;
+    protected int _processingUnitIndex = -1;
     [SerializeField] protected CameraMover _combatCamera;
     [SerializeField] protected CombatPanel _combatPanel;
 
@@ -24,18 +18,18 @@ public class CombatStateHandler : MonoBehaviour
         _processingRoundMoves = false,
         _cameraControllable = false;
     protected String _defaultCamPosition = "";
-    public String ControlledCamTag = "";
+    [HideInInspector] public String ControlledCamTag = "";
 
     [SerializeField] protected bool _debugStartCombat;
     [SerializeField] protected bool _debugEndCombat;
     [SerializeField] protected bool _debugEnemySubmittedMoves;
-    [SerializeField] private List<BattlefieldCameraSlot> _cameraSlots = new();
+    [SerializeField] protected Transform _overheadCam;
     [SerializeField] protected List<CombatantSlot> _playerSlots = new();
     [SerializeField] protected List<CombatantSlot> _enemySlots = new();
     [SerializeField] protected List<Combatant> _playerTeam = new();
     [SerializeField] protected List<Combatant> _enemyTeam = new();
-    [SerializeField] protected List<Combatant> _movingCombatants = new();
-    protected Dictionary<String, BattlefieldCameraSlot> _cameraSlotDict = new();
+    protected List<Combatant> _movingCombatants = new();
+    protected Dictionary<String, CombatantSlot> _slotDict = new();
 
     public void SelectMove(String MoveTag){
         if(MoveTag.CompareTo("") == 0){
@@ -56,12 +50,15 @@ public class CombatStateHandler : MonoBehaviour
         TurnUnit().SubmittedMoveTag = MoveTag;
     }
 
-    public void SubmitTarget(Combatant combatant){
+    public void SubmitTarget(CombatantSlot slot){
         if(!IsAwaitingTarget()) return;
-        if(!MoveProcessor.Instance.HasValidTarget(TurnUnit())) return; 
+        if(!MoveProcessor.Instance.IsTargetSlotValid(TurnUnit(), slot)){
+            Debug.Log("[COMBAT]: Invalid Target Submitted " + slot.AssignedCombatant);
+            return; 
+        }
 
-        Debug.Log("[COMBAT]: Valid Target Submitted " + combatant);
-        TurnUnit().SubmittedTarget = combatant;
+        Debug.Log("[COMBAT]: Valid Target Submitted " + slot.AssignedCombatant);
+        TurnUnit().SubmittedSlotTargetTag = slot.SlotTag;
     }
 
     public bool IsCombatActive(){
@@ -78,7 +75,7 @@ public class CombatStateHandler : MonoBehaviour
             if(unit.HasDied) continue;
             if(
                 unit.SubmittedMoveTag.CompareTo("") == 0 ||
-                unit.SubmittedTarget.CompareTo("") == 0
+                unit.SubmittedSlotTargetTag.CompareTo("") == 0
             ) return false;
         }
 
@@ -90,7 +87,7 @@ public class CombatStateHandler : MonoBehaviour
             !TurnUnit().HasDied &&
             (
                 TurnUnit().SubmittedMoveTag.CompareTo("") != 0 &&
-                TurnUnit().SubmittedTarget.CompareTo("") == 0
+                TurnUnit().SubmittedSlotTargetTag.CompareTo("") == 0
             )
         ;
     }
@@ -100,7 +97,7 @@ public class CombatStateHandler : MonoBehaviour
             TurnUnit().HasDied || 
             (
                 TurnUnit().SubmittedMoveTag.CompareTo("") != 0 &&
-                TurnUnit().SubmittedTarget.CompareTo("") != 0
+                TurnUnit().SubmittedSlotTargetTag.CompareTo("") != 0
             )
         ;
     }
@@ -161,12 +158,14 @@ public class CombatStateHandler : MonoBehaviour
         );
     }
 
-    protected void InitializeCameraSlotDict(){
-        _cameraSlotDict.Clear();
+    protected void InitializeSlotDict(){
+        _slotDict.Clear();
 
-        foreach(BattlefieldCameraSlot slot in _cameraSlots){
-            _cameraSlotDict.Add(slot.SlotTag, slot);
+        foreach(CombatantSlot slot in _playerSlots){
+            _slotDict.Add(slot.SlotTag, slot);
+        }
+        foreach(CombatantSlot slot in _enemySlots){
+            _slotDict.Add(slot.SlotTag, slot);
         }
     }
-
 }

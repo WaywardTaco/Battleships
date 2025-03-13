@@ -26,9 +26,14 @@ public class CombatManager : CombatStateHandler {
 
         ControlledCamTag = "";
     }
+    public CombatantSlot GetCombatantSlot(String slotTag){
+        if(!_slotDict.ContainsKey(slotTag)) return null;
+
+        return _slotDict[slotTag];
+    }
     
     private IEnumerator PlayCombat(){
-        Debug.Log("[COMBAT]: Combat Started");
+        // Debug.Log("[COMBAT]: Combat Started");
 
         while(!ShouldCombatEnd()){
             if(!_roundPlaying) 
@@ -99,7 +104,7 @@ public class CombatManager : CombatStateHandler {
         _processingRoundMoves = false;
     }
     private void EndTurn(){
-        Debug.Log($"[COMBAT]: Ending Turn {_turnCount}");
+        // Debug.Log($"[COMBAT]: Ending Turn {_turnCount}");
         
         _cameraControllable = false;
         _turnPlaying = false;
@@ -107,18 +112,18 @@ public class CombatManager : CombatStateHandler {
         _turnCount++;
     }
     private void EndRound(){
-        Debug.Log($"[COMBAT]: Ending Round {_roundCount}");
+        // Debug.Log($"[COMBAT]: Ending Round {_roundCount}");
         _debugEnemySubmittedMoves = false;
 
         _roundPlaying = false;
         
         foreach(Combatant unit in _playerTeam){
             unit.SubmittedMoveTag = "";
-            unit.SubmittedTarget = "";
+            unit.SubmittedSlotTargetTag = "";
         }
         foreach(Combatant unit in _enemyTeam){
             unit.SubmittedMoveTag = "";
-            unit.SubmittedTarget = "";
+            unit.SubmittedSlotTargetTag = "";
         }
 
         _roundCount++;
@@ -135,11 +140,17 @@ public class CombatManager : CombatStateHandler {
         if(_defaultCamPosition.CompareTo("") == 0) return;
 
         if(!_cameraControllable || ControlledCamTag.CompareTo("") == 0){
-            _combatCamera.MoveCamTo(_cameraSlotDict[_defaultCamPosition].CamSlot, true);
+            if(_defaultCamPosition.CompareTo("Overhead") == 0)
+                _combatCamera.MoveCamTo(_overheadCam, true);
+            else
+                _combatCamera.MoveCamTo(_slotDict[_defaultCamPosition].CameraPosition, true);
             return;
         }
 
-        _combatCamera.MoveCamTo(_cameraSlotDict[ControlledCamTag].CamSlot, false);
+        if(ControlledCamTag.CompareTo("Overhead") == 0)
+            _combatCamera.MoveCamTo(_overheadCam, false);
+        else
+            _combatCamera.MoveCamTo(_slotDict[ControlledCamTag].CameraPosition, false);
     }
 
     public static CombatManager Instance { get; private set;}
@@ -160,7 +171,7 @@ public class CombatManager : CombatStateHandler {
     }
     private void Setup(){
         _combatPanel.gameObject.SetActive(false);
-        InitializeCameraSlotDict();
+        InitializeSlotDict();
     }
     void Update()
     {

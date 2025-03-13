@@ -1272,9 +1272,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: E1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: E1
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 1207397539}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -1512,7 +1520,7 @@ MonoBehaviour:
   UNIT_SPRITES_FILEPATH: /Sprites/Units/
   UNIT_SPRITE_PIVOT: {x: 0.5, y: 0.5}
   UNIT_SPRITE_PIXELS_PER_UNIT: 100
-  _debugLoadUnits: 1
+  _debugLoadUnits: 0
   _debugLoadMoves: 0
   _debugOutputUnits: 0
   _debugOutputMoves: 0
@@ -1529,27 +1537,40 @@ MonoBehaviour:
     MoveList:
     - MoveA
     - MoveB
-    - MoveA
-    - MoveB
+    - MoveC
+    - 
   _loadedMoves:
   - MoveTag: MoveA
-    MoveName: Jonthan frank
-    MoveDescription: blah blah blah
+    MoveName: Single/Self
+    MoveDescription: Single/Self
     MoveKind: Physical
     MoveType: Slash
-    MoveTargets: []
+    MoveTargets:
+    - Single
+    - Self
     MoveEffect: []
     MovePower: 5
     MoveCostBase: 12
     MoveCostGrowthRate: 0.2
   - MoveTag: MoveB
-    MoveName: Jonthan frank
-    MoveDescription: blah blah blah
+    MoveName: Party/Spread
+    MoveDescription: Party/Spread
     MoveKind: Physical
     MoveType: Slash
     MoveTargets:
-    - Single
     - Party
+    - Spread
+    MoveEffect: []
+    MovePower: 5
+    MoveCostBase: 12
+    MoveCostGrowthRate: 0.2
+  - MoveTag: MoveC
+    MoveName: Ally
+    MoveDescription: Ally
+    MoveKind: Physical
+    MoveType: Slash
+    MoveTargets:
+    - Ally
     MoveEffect: []
     MovePower: 5
     MoveCostBase: 12
@@ -1567,7 +1588,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1890132489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &480761356
@@ -1583,30 +1605,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraReturnTime: 0
-  _roundCount: 0
-  _turnCount: 0
-  _processingUnitIndex: -1
   _combatCamera: {fileID: 100039829}
   _combatPanel: {fileID: 1379900780}
   ControlledCamTag: 
   _debugStartCombat: 0
   _debugEndCombat: 0
   _debugEnemySubmittedMoves: 0
-  _cameraSlots:
-  - SlotTag: Overhead
-    CamSlot: {fileID: 1890132489}
-  - SlotTag: P1
-    CamSlot: {fileID: 214420815}
-  - SlotTag: P2
-    CamSlot: {fileID: 2106394883}
-  - SlotTag: P3
-    CamSlot: {fileID: 1598954009}
-  - SlotTag: E1
-    CamSlot: {fileID: 1207397539}
-  - SlotTag: E2
-    CamSlot: {fileID: 771463182}
-  - SlotTag: E3
-    CamSlot: {fileID: 1873389835}
+  _overheadCam: {fileID: 1890132489}
   _playerSlots:
   - {fileID: 1003115461}
   - {fileID: 1462810721}
@@ -1618,60 +1623,65 @@ MonoBehaviour:
   _playerTeam:
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 1
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: 1
     isInRear: 0
+    isAlly: 0
     HasDied: 0
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 5
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: 2
     isInRear: 0
+    isAlly: 0
     HasDied: 0
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 10
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: 3
     isInRear: 0
+    isAlly: 0
     HasDied: 0
   _enemyTeam:
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 0
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: -1
     isInRear: 0
+    isAlly: 0
     HasDied: 0
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 0
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: -2
     isInRear: 0
+    isAlly: 0
     HasDied: 0
   - UnitTag: Frank
     SubmittedMoveTag: 
-    SubmittedTarget: 
+    SubmittedSlotTargetTag: 
     Level: 0
     CurrentHealth: 0
     CurrentStamina: 0
     SpeedStage: -3
     isInRear: 0
+    isAlly: 0
     HasDied: 0
-  _movingCombatants: []
 --- !u!114 &480761357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2009,9 +2019,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: P2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: P2
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 2106394883}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -2633,9 +2651,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: P3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: P3
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 1598954009}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -2706,9 +2732,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: E3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: E3
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 1873389835}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -2825,8 +2859,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1890132489}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1890132488
@@ -2858,7 +2891,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1889339292}
+  m_Father: {fileID: 480761355}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1956615034
 GameObject:
@@ -2977,9 +3010,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: E2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: E2
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 771463182}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -3290,9 +3331,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: SlotTag
+      value: P1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _camSlotTag
       value: P1
       objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: CameraPosition
+      value: 
+      objectReference: {fileID: 214420815}
     - target: {fileID: 6311510659981600956, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

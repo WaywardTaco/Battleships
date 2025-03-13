@@ -9,11 +9,10 @@ using UnityEngine.UI;
 
 public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    public String SlotTag;
+    public Combatant AssignedCombatant;
+    public Transform CameraPosition;
     [SerializeField] private Image _unitSprite;
-    [SerializeField] private Combatant _assignedCombatant;
-    
-    [SerializeField] private String _camSlotTag;
-    [SerializeField] private Transform _cameraFocusPosition;
     [SerializeField] private Transform _forwardLocation;
     [SerializeField] private Transform _rearLocation;
     private bool _hoveringOn = false;
@@ -21,13 +20,13 @@ public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerClick(PointerEventData eventData)
     {
         _hoveringOn = false;
-        CombatManager.Instance.SubmitTarget(_assignedCombatant);
+        CombatManager.Instance.SubmitTarget(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         _hoveringOn = true;
-        CombatManager.Instance.ControlledCamTag = _camSlotTag;
+        CombatManager.Instance.ControlledCamTag = SlotTag;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -48,7 +47,7 @@ public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             );
         }
 
-        _assignedCombatant = combatant;
+        AssignedCombatant = combatant;
 
         // if(combatant.isInRear){
         //     _unitSprite.parent

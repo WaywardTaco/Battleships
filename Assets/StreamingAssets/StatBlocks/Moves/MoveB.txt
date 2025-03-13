@@ -1,12 +1,12 @@
 {
   "MoveTag": "MoveB",
-  "MoveName": "Jonthan frank",
-  "MoveDescription": "blah blah blah",
+  "MoveName": "Party/Spread",
+  "MoveDescription": "Party/Spread",
   "MoveKind": "Physical",
   "MoveType": "Slash",
   "MoveTargets": [
-    "Single",
-    "Party"
+    "Party",
+    "Spread"
   ],
   "MoveEffect": [],
   "MovePower": 5,
