@@ -20,14 +20,11 @@ public class CombatManager : CombatStateHandler {
     public void MoveCamTo(Transform target, bool priority = true){
         _combatCamera.MoveCamTo(target, priority);
     }
-    public void MoveCamTo(String slotTag, bool priority = true){
-        _combatCamera.MoveCameraToSlot(slotTag, priority);
-    }
     public void MoveCamToDefault(String slotTag = "", bool priority = true){
         if(slotTag.CompareTo("") != 0)
             _defaultCamPosition = slotTag;
-        if(_defaultCamPosition.CompareTo("") != 0)
-            _combatCamera.MoveCameraToSlot(_defaultCamPosition, priority);
+
+        ControlledCamTag = "";
     }
     
     private IEnumerator PlayCombat(){
@@ -52,11 +49,15 @@ public class CombatManager : CombatStateHandler {
             if(!_turnPlaying && !DidPlayerSubmitMoves()) 
                 StartCoroutine(PlayTurn());
             else if(DidPlayerSubmitMoves()){
-                MoveCamToDefault("Overhead");
+                _defaultCamPosition = "Overhead";
             }
+
             yield return new WaitForEndOfFrame();
         }
         
+        _cameraControllable = false;
+        _defaultCamPosition = "Overhead";
+
         do {
             if(!_processingRoundMoves)
                 StartCoroutine(ProcessMoves());
@@ -69,13 +70,13 @@ public class CombatManager : CombatStateHandler {
     private IEnumerator PlayTurn(){
         Debug.Log($"[COMBAT]: Playing Turn {_turnCount}");
         _turnPlaying = true;
-        MoveCamToDefault("P" + (_turnCount + 1));
+        _cameraControllable = true;
+        _defaultCamPosition = "P" + (_turnCount + 1);
 
         UnitData unitData = DataLoader.Instance.GetUnitData(TurnUnit().UnitTag);
         _combatPanel.LoadButtonInfo(TurnUnit(), unitData.MoveList);
 
         while(!ShouldTurnEnd()){
-            Debug.Log("Playing turn");
             yield return new WaitForEndOfFrame();
         }
 
@@ -100,6 +101,7 @@ public class CombatManager : CombatStateHandler {
     private void EndTurn(){
         Debug.Log($"[COMBAT]: Ending Turn {_turnCount}");
         
+        _cameraControllable = false;
         _turnPlaying = false;
 
         _turnCount++;
@@ -128,6 +130,18 @@ public class CombatManager : CombatStateHandler {
         _roundCount = 0;
     }
 
+    
+    private void UpdateCameraPosition(){
+        if(_defaultCamPosition.CompareTo("") == 0) return;
+
+        if(!_cameraControllable || ControlledCamTag.CompareTo("") == 0){
+            _combatCamera.MoveCamTo(_cameraSlotDict[_defaultCamPosition].CamSlot, true);
+            return;
+        }
+
+        _combatCamera.MoveCamTo(_cameraSlotDict[ControlledCamTag].CamSlot, false);
+    }
+
     public static CombatManager Instance { get; private set;}
     void Start(){
         if(Instance == null){
@@ -146,6 +160,7 @@ public class CombatManager : CombatStateHandler {
     }
     private void Setup(){
         _combatPanel.gameObject.SetActive(false);
+        InitializeCameraSlotDict();
     }
     void Update()
     {
@@ -153,5 +168,6 @@ public class CombatManager : CombatStateHandler {
             _debugStartCombat = false;
             StartCombat();
         }
+        UpdateCameraPosition();
     }
 }

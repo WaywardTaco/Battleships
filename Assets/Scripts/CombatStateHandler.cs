@@ -6,6 +6,12 @@ using UnityEngine;
 public class CombatStateHandler : MonoBehaviour
 {
     
+    [Serializable] public class BattlefieldCameraSlot {
+        public String SlotTag;
+        public Transform CamSlot;
+    }
+    
+    [SerializeField] private float _cameraReturnTime = 0;
     [SerializeField] protected uint _roundCount = 0;
     [SerializeField] protected uint _turnCount = 0;
     [SerializeField] protected int _processingUnitIndex = -1;
@@ -15,19 +21,22 @@ public class CombatStateHandler : MonoBehaviour
     protected bool
         _turnPlaying = false,
         _roundPlaying = false,
-        _processingRoundMoves = false;
+        _processingRoundMoves = false,
+        _cameraControllable = false;
     protected String _defaultCamPosition = "";
+    public String ControlledCamTag = "";
 
     [SerializeField] protected bool _debugStartCombat;
     [SerializeField] protected bool _debugEndCombat;
     [SerializeField] protected bool _debugEnemySubmittedMoves;
+    [SerializeField] private List<BattlefieldCameraSlot> _cameraSlots = new();
     [SerializeField] protected List<CombatantSlot> _playerSlots = new();
     [SerializeField] protected List<CombatantSlot> _enemySlots = new();
     [SerializeField] protected List<Combatant> _playerTeam = new();
     [SerializeField] protected List<Combatant> _enemyTeam = new();
     [SerializeField] protected List<Combatant> _movingCombatants = new();
+    protected Dictionary<String, BattlefieldCameraSlot> _cameraSlotDict = new();
 
-    
     public void SelectMove(String MoveTag){
         if(MoveTag.CompareTo("") == 0){
             Debug.Log("[COMBAT]: No Move Selected");
@@ -46,6 +55,7 @@ public class CombatStateHandler : MonoBehaviour
 
         TurnUnit().SubmittedMoveTag = MoveTag;
     }
+
     public void SubmitTarget(Combatant combatant){
         if(!IsAwaitingTarget()) return;
         if(!MoveProcessor.Instance.HasValidTarget(TurnUnit())) return; 
@@ -58,6 +68,32 @@ public class CombatStateHandler : MonoBehaviour
         return _roundCount != 0;
     }
 
+    protected bool DidPlayerSubmitMoves(){
+        return _turnCount >= _playerTeam.Count;
+    }
+    protected bool DidEnemySubmitMoves(){
+        if(_debugEnemySubmittedMoves) return true;
+
+        foreach(Combatant unit in _enemyTeam){
+            if(unit.HasDied) continue;
+            if(
+                unit.SubmittedMoveTag.CompareTo("") == 0 ||
+                unit.SubmittedTarget.CompareTo("") == 0
+            ) return false;
+        }
+
+        return true;
+    }
+    protected bool IsAwaitingTarget(){
+        // Says that a target is being waited for if the unit is alive, has a move, but no target
+        return 
+            !TurnUnit().HasDied &&
+            (
+                TurnUnit().SubmittedMoveTag.CompareTo("") != 0 &&
+                TurnUnit().SubmittedTarget.CompareTo("") == 0
+            )
+        ;
+    }
     protected bool ShouldTurnEnd(){
         // Returns that the turn should end if the unit is either dead or the unit has a submitted move and target
         return 
@@ -70,7 +106,7 @@ public class CombatStateHandler : MonoBehaviour
     }
     protected bool ShouldRoundEnd(){
         return 
-            _debugEnemySubmittedMoves && 
+            DidEnemySubmitMoves() && 
             DidPlayerSubmitMoves();;
     }
     protected bool ShouldCombatEnd(){
@@ -81,20 +117,9 @@ public class CombatStateHandler : MonoBehaviour
 
         return _debugEndCombat;
     }
-    protected bool DidPlayerSubmitMoves(){
-        return _turnCount >= _playerTeam.Count;
-    }
-    protected bool IsAwaitingTarget(){
-        // Returns that the turn should end if the unit is either dead or the unit has a submitted move but no target
-        return 
-            !TurnUnit().HasDied &&
-            (
-                TurnUnit().SubmittedMoveTag.CompareTo("") != 0 &&
-                TurnUnit().SubmittedTarget.CompareTo("") == 0
-            )
-        ;
-    }
     protected Combatant TurnUnit(){
+        if(_turnCount >= _playerTeam.Count) return null;
+
         return _playerTeam[(int)_turnCount];
     }
 
@@ -132,6 +157,14 @@ public class CombatStateHandler : MonoBehaviour
                 return unitB.CurrentSpeed() - unitA.CurrentSpeed();
             }
         );
+    }
+
+    protected void InitializeCameraSlotDict(){
+        _cameraSlotDict.Clear();
+
+        foreach(BattlefieldCameraSlot slot in _cameraSlots){
+            _cameraSlotDict.Add(slot.SlotTag, slot);
+        }
     }
 
 }

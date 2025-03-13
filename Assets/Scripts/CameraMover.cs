@@ -6,21 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMover : MonoBehaviour
 {
-   
-    [Serializable] public class BattlefieldCameraSlot {
-        public String SlotTag;
-        public Transform CamSlot;
-    }
     [SerializeField] private float CAMERA_MOVE_RATE;
     [SerializeField] private float CAMERA_ROTATE_RATE;
     private bool _isMovingCamera = false;
     
-    [SerializeField] private List<BattlefieldCameraSlot> _cameraSlots = new();
-    private Dictionary<String, BattlefieldCameraSlot> _cameraSlotDict = new();
-
-    public void MoveCameraToSlot(String SlotTag, bool priority = true, float duration = -1){
-        MoveCamTo(_cameraSlotDict[SlotTag].CamSlot, priority, duration);
-    }
     public void MoveCamTo(Transform target, bool priority = true, float duration = -1){
         if(_isMovingCamera && !priority){
             return;
@@ -62,16 +51,5 @@ public class CameraMover : MonoBehaviour
 
         transform.SetPositionAndRotation(target.position, target.rotation);
         _isMovingCamera = false;
-    }
-    private void InitializeCameraSlotDict(){
-        _cameraSlotDict.Clear();
-
-        foreach(BattlefieldCameraSlot slot in _cameraSlots){
-            _cameraSlotDict.Add(slot.SlotTag, slot);
-        }
-    }
-    
-    void Start(){
-        InitializeCameraSlotDict();
     }
 }

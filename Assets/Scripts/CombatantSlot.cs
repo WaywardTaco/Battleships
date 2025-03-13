@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -10,6 +11,8 @@ public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     [SerializeField] private Image _unitSprite;
     [SerializeField] private Combatant _assignedCombatant;
+    
+    [SerializeField] private String _camSlotTag;
     [SerializeField] private Transform _cameraFocusPosition;
     [SerializeField] private Transform _forwardLocation;
     [SerializeField] private Transform _rearLocation;
@@ -17,23 +20,21 @@ public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Clicked");
         _hoveringOn = false;
         CombatManager.Instance.SubmitTarget(_assignedCombatant);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("HoverOn");
-        // if(!_hoveringOn)
         _hoveringOn = true;
+        CombatManager.Instance.ControlledCamTag = _camSlotTag;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("HoverOff");
         _hoveringOn = false;
-        CombatManager.Instance.MoveCamToDefault();
+        // CombatManager.Instance.ControlledCamTag = "";
+        // CombatManager.Instance.MoveCamToDefault();
     }
 
     public void UpdateCombatant(Combatant combatant, bool isAlly = false){
@@ -56,8 +57,7 @@ public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void Update()
     {
-        if(_hoveringOn){
-            CombatManager.Instance.MoveCamTo(_cameraFocusPosition, false);
-        }
+        // if(_hoveringOn){
+        // }
     }
 }

@@ -451,21 +451,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CAMERA_MOVE_RATE: 4
   CAMERA_ROTATE_RATE: 50
-  _cameraSlots:
-  - SlotTag: Overhead
-    CamSlot: {fileID: 1890132489}
-  - SlotTag: P1
-    CamSlot: {fileID: 214420815}
-  - SlotTag: P2
-    CamSlot: {fileID: 2106394883}
-  - SlotTag: P3
-    CamSlot: {fileID: 1598954009}
-  - SlotTag: E1
-    CamSlot: {fileID: 1207397539}
-  - SlotTag: E2
-    CamSlot: {fileID: 771463182}
-  - SlotTag: E3
-    CamSlot: {fileID: 1873389835}
 --- !u!1 &105234892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1287,6 +1272,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: E1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
       objectReference: {fileID: 1207397539}
@@ -1463,7 +1452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1498,6 +1487,7 @@ GameObject:
   - component: {fileID: 480761355}
   - component: {fileID: 480761354}
   - component: {fileID: 480761356}
+  - component: {fileID: 480761357}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -1581,9 +1571,25 @@ MonoBehaviour:
   _processingUnitIndex: -1
   _combatCamera: {fileID: 100039829}
   _combatPanel: {fileID: 1379900780}
+  ControlledCamTag: 
   _debugStartCombat: 0
   _debugEndCombat: 0
   _debugEnemySubmittedMoves: 0
+  _cameraSlots:
+  - SlotTag: Overhead
+    CamSlot: {fileID: 1890132489}
+  - SlotTag: P1
+    CamSlot: {fileID: 214420815}
+  - SlotTag: P2
+    CamSlot: {fileID: 2106394883}
+  - SlotTag: P3
+    CamSlot: {fileID: 1598954009}
+  - SlotTag: E1
+    CamSlot: {fileID: 1207397539}
+  - SlotTag: E2
+    CamSlot: {fileID: 771463182}
+  - SlotTag: E3
+    CamSlot: {fileID: 1873389835}
   _playerSlots:
   - {fileID: 1003115461}
   - {fileID: 1462810721}
@@ -1649,6 +1655,19 @@ MonoBehaviour:
     isInRear: 0
     HasDied: 0
   _movingCombatants: []
+--- !u!114 &480761357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480761353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d67e061659fa664680caaab3abd7279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debugEndProcessMove: 0
 --- !u!1 &500571519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,7 +1737,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 100039827}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1972,6 +1991,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 100039827}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: P2
+      objectReference: {fileID: 0}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -2287,7 +2310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2593,6 +2616,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 100039827}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: P3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
       objectReference: {fileID: 1598954009}
@@ -2661,6 +2688,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 100039827}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: E3
+      objectReference: {fileID: 0}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -2928,6 +2959,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 100039827}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: E2
+      objectReference: {fileID: 0}
     - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: _cameraFocusPosition
       value: 
@@ -3237,6 +3272,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 100039827}
+    - target: {fileID: 5138440288990440213, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
+      propertyPath: _camSlotTag
+      value: P1
+      objectReference: {fileID: 0}
     - target: {fileID: 6311510659981600956, guid: d647d2a6e7a04794ea56f511d1e8fb9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
