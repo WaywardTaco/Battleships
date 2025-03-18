@@ -153,6 +153,18 @@ public class CombatManager : CombatStateHandler {
             _combatCamera.MoveCamTo(_slotDict[ControlledCamTag].CameraPosition, false);
     }
 
+    public void UpdateLookingAtStats(Combatant combatant){
+        if(combatant == null){
+            _statDisplay.gameObject.SetActive(false);
+            return;
+        }
+
+        _statDisplay.gameObject.SetActive(true);
+
+        _statDisplay.HpText.text = $"HP: {combatant.CurrentHealth}/{combatant.MaxHP()}";
+        _statDisplay.SpText.text = $"SP: {combatant.CurrentStamina}/{combatant.MaxSP()}";
+    }
+
     public static CombatManager Instance { get; private set;}
     void Start(){
         if(Instance == null){

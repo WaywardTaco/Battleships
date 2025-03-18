@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CombatStateHandler : MonoBehaviour
@@ -10,6 +11,7 @@ public class CombatStateHandler : MonoBehaviour
     protected uint _turnCount = 0;
     protected int _processingUnitIndex = -1;
     [SerializeField] protected CameraMover _combatCamera;
+    [SerializeField] protected StatDisplay _statDisplay;
     [SerializeField] protected CombatPanel _combatPanel;
 
     protected bool
@@ -124,11 +126,13 @@ public class CombatStateHandler : MonoBehaviour
         int slotCount = _playerSlots.Count;
         for(int i = 0; i < slotCount && i < _playerTeam.Count; i++){
             _playerTeam[i].isAlly = true;
+            _playerTeam[i].Initialize();
             _playerSlots[i].UpdateCombatant(_playerTeam[i]);
         }
         slotCount = _enemySlots.Count;
         for(int i = 0; i < slotCount && i < _enemyTeam.Count; i++){
             _enemyTeam[i].isAlly = false;
+            _enemyTeam[i].Initialize();
             _enemySlots[i].UpdateCombatant(_enemyTeam[i]);
         }
     }
