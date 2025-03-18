@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public abstract class IMoveEffect {
+public abstract class IMoveEffect : ScriptableObject {
     public abstract void Use(Combatant user, Combatant target, MoveData move);
 }
 
+[CreateAssetMenu(fileName = "New Effect", menuName = "Scriptables/MoveEffects/Attack", order = 0)]
 public class Attack : IMoveEffect {
     public override void Use(Combatant user, Combatant target, MoveData move){
         bool isSpecial = false;
@@ -26,6 +28,7 @@ public class Attack : IMoveEffect {
     }
 }
 
+[CreateAssetMenu(fileName = "New Effect", menuName = "Scriptables/MoveEffects/Defend", order = 0)]
 public class Defend : IMoveEffect {
     public override void Use(Combatant user, Combatant target, MoveData move){
         throw new NotImplementedException();

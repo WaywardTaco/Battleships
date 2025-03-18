@@ -7,13 +7,13 @@ public class MoveProcessor : MonoBehaviour
 {
     [Serializable] public class TagEffectTracker{
         public String MoveTag;
-        public IMoveEffect MoveEffect;
+        [SerializeReference] public IMoveEffect MoveEffect;
     }
 
     public bool IsProcessingMove { get; private set; } = false;
     public bool IsProcessingEffect = false;
     [SerializeField] private bool _debugEndProcessMove = false;
-    [SerializeReference] private List<TagEffectTracker> _moveTagEffects = new();
+    [SerializeField] private List<TagEffectTracker> _moveTagEffects = new();
     private Dictionary<String, IMoveEffect> _moveEffectDict = new(); 
 
     private IEnumerator ProcessMove(Combatant user){

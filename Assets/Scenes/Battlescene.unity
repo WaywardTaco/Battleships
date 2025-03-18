@@ -1747,10 +1747,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsProcessingEffect: 0
   _debugEndProcessMove: 0
-  _moveTagEffects: []
-  references:
-    version: 2
-    RefIds: []
+  _moveTagEffects:
+  - MoveTag: Attack
+    MoveEffect: {fileID: 11400000, guid: f232ee36878b99a4598fddb9adaeb3c4, type: 2}
 --- !u!1 &481002444
 GameObject:
   m_ObjectHideFlags: 0
