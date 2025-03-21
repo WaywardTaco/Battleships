@@ -6,43 +6,22 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ActionButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public String AssignedMove = "";
-    public int MoveCost = 0;
-
-    [SerializeField] private TMP_Text _moveNameText;
-    [SerializeField] private TMP_Text _moveCostText;
-
-    public UnityEvent<ActionButton, bool> _HoverCallbackHandler;
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        _HoverCallbackHandler.Invoke(this, true);
+    public TMP_Text MoveNameText;
+    public TMP_Text MoveCostText;
+    [HideInInspector] public MoveData AssignedMove;
+    
+    public void OnPointerClick(PointerEventData eventData){
+        CombatManager.Instance.ActionButtonClickCallback(this);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _HoverCallbackHandler.Invoke(this, false);
+    public void OnPointerEnter(PointerEventData eventData){
+        CombatManager.Instance.ActionButtonHoverCallback(this, true);
+    
     }
 
-    void Update()
-    {
-        if(AssignedMove.CompareTo("") != 0){
-            MoveData data = DataLoader.Instance.GetMoveData(AssignedMove);
-            if(data == null){
-                _moveNameText.text = "";
-                _moveCostText.text = "";
-                MoveCost = 0;
-            }
-            else{
-                _moveNameText.text = data.MoveName;
-                _moveCostText.text = $"{MoveCost}SP";
-            }
-        } else {
-            _moveNameText.text = "";
-            _moveCostText.text = "";
-            MoveCost = 0;
-        }
+    public void OnPointerExit(PointerEventData eventData){
+        CombatManager.Instance.ActionButtonHoverCallback(this, false);
     }
 }

@@ -10,50 +10,66 @@ using UnityEngine;
     private const float SPD_STAGE_MULT = 0.5f;
     private const float SPE_STAGE_MULT = 0.25f;
 
-    public string UnitTag;
-    public string SubmittedMoveTag;
-    public string SubmittedSlotTargetTag;
-    public int Level;
-    public int CurrentHealth;
-    public int CurrentStamina;
-    public int ATKStage;
-    public int SPAStage;
-    public int DEFStage;
-    public int SPDStage;
-    public int SPEStage;
-    public bool isAlly;
-    public bool HasDied;
-    public UnitData Data {
-        get {return DataLoader.Instance.GetUnitData(UnitTag);}
+    public string UnitTag = "";
+    public int Level = 10;
+    [HideInInspector] public string MoveTag = "";
+    [HideInInspector] public string TargetSlotTag = "";
+    public int CurrentHealth = 0;
+    public int CurrentStamina = 0;
+    [HideInInspector] public int ATKStage = 0;
+    [HideInInspector] public int SPAStage = 0;
+    [HideInInspector] public int DEFStage = 0;
+    [HideInInspector] public int SPDStage = 0;
+    [HideInInspector] public int SPEStage = 0;
+    [HideInInspector] public bool IsAlly = false;
+    [HideInInspector] public bool HasDied = false;
+    [HideInInspector] public bool HasMoved = false;
+    public UnitData Info {
+        get { return DataLoader.Instance.GetUnitData(UnitTag); }
+    }
+    public MoveData Move {
+        get { return DataLoader.Instance.GetMoveData(MoveTag); }
+    }
+    public bool HasMoveAndTarget {
+        get {
+            return MoveTag.CompareTo("") != 0 && TargetSlotTag.CompareTo("") != 0;
+        }
+    }
+    public Sprite GetSprite(int index){
+        return DataLoader.Instance.GetUnitSprite(Info.SpriteList[index]);
     }
 
     public void Initialize(){
-        CurrentHealth = MaxHP();
-        CurrentStamina = MaxSP();
+        CurrentHealth = MaxHP;
+        CurrentStamina = MaxSP;
         HasDied = false;
     }
 
     public int CurrentAttack(){
-        return (int)(((float)Data.ATK_Base + (Data.ATK_Growth * (float)Level)) * (((float)ATKStage * ATK_STAGE_MULT) + 1.0f));
+        return (int)(((float)Info.ATK_Base + (Info.ATK_Growth * (float)Level)) * (((float)ATKStage * ATK_STAGE_MULT) + 1.0f));
     }
     public int CurrentSpecialAttack(){
-        return (int)(((float)Data.SPA_Base + (Data.SPA_Growth * (float)Level)) * (((float)SPAStage * SPA_STAGE_MULT) + 1.0f));
+        return (int)(((float)Info.SPA_Base + (Info.SPA_Growth * (float)Level)) * (((float)SPAStage * SPA_STAGE_MULT) + 1.0f));
     }
     public int CurrentDefense(){
-        return (int)(((float)Data.DEF_Base + (Data.DEF_Growth * (float)Level)) * (((float)DEFStage * DEF_STAGE_MULT) + 1.0f));
+        return (int)(((float)Info.DEF_Base + (Info.DEF_Growth * (float)Level)) * (((float)DEFStage * DEF_STAGE_MULT) + 1.0f));
     }
     public int CurrentSpecialDefense(){
-        return (int)(((float)Data.SPD_Base + (Data.SPD_Growth * (float)Level)) * (((float)SPDStage * SPD_STAGE_MULT) + 1.0f));
+        return (int)(((float)Info.SPD_Base + (Info.SPD_Growth * (float)Level)) * (((float)SPDStage * SPD_STAGE_MULT) + 1.0f));
     }
     public int CurrentSpeed(){
-        return (int)(((float)Data.SPE_Base + (Data.SPE_Growth * (float)Level)) * (((float)SPEStage * SPE_STAGE_MULT) + 1.0f));
+        return (int)(((float)Info.SPE_Base + (Info.SPE_Growth * (float)Level)) * (((float)SPEStage * SPE_STAGE_MULT) + 1.0f));
     }
 
-    public int MaxHP(){
-        return (int)((float)Data.HP_Base + (Data.HP_Growth * (float)Level));
+    public int MaxHP{
+        get {
+            return (int)((float)Info.HP_Base + (Info.HP_Growth * (float)Level));
+        }
     }
-    public int MaxSP(){
-        return (int)((float)Data.SP_Base + (Data.SP_Growth * (float)Level));
+    public int MaxSP{
+        get {
+            return (int)((float)Info.SP_Base + (Info.SP_Growth * (float)Level));
+        }
     }
 
     public void DealDamage(int amount){
@@ -72,10 +88,10 @@ using UnityEngine;
 
         if(HasDied && !doesRevive) return;
 
-        if(CurrentHealth + amount < MaxHP()){
+        if(CurrentHealth + amount < MaxHP){
             CurrentHealth+= amount;
         } else {
-            CurrentHealth = MaxHP();
+            CurrentHealth = MaxHP;
         }
 
         if(CurrentHealth > 0 && doesRevive) 

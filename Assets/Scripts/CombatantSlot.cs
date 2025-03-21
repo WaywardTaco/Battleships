@@ -9,54 +9,39 @@ using UnityEngine.UI;
 
 public class CombatantSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public String SlotTag;
-    public Combatant AssignedCombatant;
-    public Transform CameraPosition;
+    [SerializeField] private String _slotTag = "";
     [SerializeField] private Image _unitSprite;
-    [SerializeField] private Transform _forwardLocation;
-    [SerializeField] private Transform _rearLocation;
-    private bool _hoveringOn = false;
+    [SerializeField] private Transform _cameraPosition;
+    [HideInInspector] public Combatant AssignedCombatant { get; private set; }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        _hoveringOn = false;
-        CombatManager.Instance.SubmitTarget(this);
+    public String GetSlotTag(){
+        return _slotTag;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        _hoveringOn = true;
-        CombatManager.Instance.ControlledCamTag = SlotTag;
+    public Transform GetCamPosition(){
+        return _cameraPosition;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _hoveringOn = false;
-        // CombatManager.Instance.ControlledCamTag = "";
-        // CombatManager.Instance.MoveCamToDefault();
-    }
+    public void UpdateCombatant(Combatant combatant = null){
+        if(combatant != null)
+            AssignedCombatant = combatant;
 
-    public void UpdateCombatant(Combatant combatant, bool isAlly = false){
-        if(!isAlly){
-            _unitSprite.sprite = DataLoader.Instance.GetUnitSprite(
-                combatant.Data.SpriteList[0]
-            );
+        if(combatant.IsAlly){
+            _unitSprite.sprite = AssignedCombatant.GetSprite(1);
+
         } else {
-            _unitSprite.sprite = DataLoader.Instance.GetUnitSprite(
-                combatant.Data.SpriteList[1]
-            );
+            _unitSprite.sprite = AssignedCombatant.GetSprite(0);
+
         }
-
-        AssignedCombatant = combatant;
-
-        // if(combatant.isInRear){
-        //     _unitSprite.parent
-        // }
     }
 
-    void Update()
-    {
-        // if(_hoveringOn){
-        // }
+    public void OnPointerClick(PointerEventData eventData){
+        CombatManager.Instance.SlotClickCallback(this);
+    }
+    public void OnPointerEnter(PointerEventData eventData){
+        CombatManager.Instance.SlotHoverCallback(this, true);
+    }
+    public void OnPointerExit(PointerEventData eventData){
+        CombatManager.Instance.SlotHoverCallback(this, false);
     }
 }

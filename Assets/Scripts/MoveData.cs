@@ -12,6 +12,7 @@ using UnityEngine;
     public List<String> MoveTargets;
     public List<String> MoveEffect = new();
     public int MovePower;
+    public int MovePriority;
     public int MoveCostBase;
     public float MoveCostGrowthRate;
 }

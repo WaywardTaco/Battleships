@@ -11,103 +11,83 @@ public class MoveProcessor : MonoBehaviour
     }
 
     public bool IsProcessingMove { get; private set; } = false;
-    public bool IsProcessingEffect = false;
-    [SerializeField] private bool _debugEndProcessMove = false;
+    private bool _isProcessingEffect = false;
     [SerializeField] private List<TagEffectTracker> _moveTagEffects = new();
     private Dictionary<String, IMoveEffect> _moveEffectDict = new(); 
 
-    private IEnumerator ProcessMove(Combatant user){
-        Debug.Log($"[COMBAT]: Processing {user.UnitTag}'s {user.SubmittedMoveTag} (Speed: {user.CurrentSpeed()})");
+    private IEnumerator ProcessMove(Combatant user, CombatantHandler combatantHandler, CombatViewHandler viewHandler){
+        /* START PROCESSING MOVE CODE */
+        Combatant target = combatantHandler.GetCombatantSlot(user.TargetSlotTag).AssignedCombatant;
 
-        Combatant target = CombatManager.Instance.GetCombatantSlot(user.SubmittedSlotTargetTag).AssignedCombatant;
-        MoveData move = DataLoader.Instance.GetMoveData(user.SubmittedMoveTag);
+        if(user.IsAlly)
+            viewHandler.SetMoveFeedbackText($"Your {user.Info.UnitName} used {user.Move.MoveName} on {target.Info.UnitName}!");
+        else
+            viewHandler.SetMoveFeedbackText($"Your opponent's {user.Info.UnitName} used {user.Move.MoveName} on your {target.Info.UnitName}!");
         
-        IsProcessingEffect = false;
+        _isProcessingEffect = false;
 
-        int workingEffectTagIndex = 0;
-        while(workingEffectTagIndex <= move.MoveEffect.Count || IsProcessingEffect){
-            // Await async effects before processing next move
-            if(!IsProcessingEffect && workingEffectTagIndex <= move.MoveEffect.Count){
-                IsProcessingEffect = true;
-                _moveEffectDict[move.MoveEffect[workingEffectTagIndex]].Use(user, target, move);
-                workingEffectTagIndex++;
-            }
+        /* PROCESSING ALL MOVE EFFECTS CODE */
+        for(int workingEffectIndex = 0; workingEffectIndex < user.Move.MoveEffect.Count; workingEffectIndex++){
+            do{
+                if(!_isProcessingEffect){
+                    _isProcessingEffect = true;
+                    _moveEffectDict[user.Move.MoveEffect[workingEffectIndex]].Use(user, target, this);
+                }
 
-            yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+            } while (_isProcessingEffect);
         }
 
+        /* END PROCESSING CODE */
         IsProcessingMove = false;
+        user.HasMoved = true;
+        combatantHandler.UpdateMovingCombatants();
     }
 
-    public bool IsTargetSlotValid(Combatant user, CombatantSlot slot){
-        if(user == null) return false;
-        Debug.Log("User is not null");
-        if(user.HasDied) return false;
-        Debug.Log("User is not dead");
+    public void FinishedMoveProcessCallback(){
+        _isProcessingEffect = false;
+    }
 
-        if(slot == null) return false;
-        Debug.Log("Slot is not null");
+    public bool IsMoveTargetValid(Combatant user, CombatantSlot slot){
+        if(user == null)        return false;
+        if(slot == null)        return false;
+        if(user.HasDied)        return false;
+        if(user.Move == null)   return false;
 
-        MoveData moveData = DataLoader.Instance.GetMoveData(user.SubmittedMoveTag);
-        if(moveData == null) return false;
-        Debug.Log("Move Data is not null");
-
-        List<String> validMoveTargets = moveData.MoveTargets;
+        List<String> validMoveTargets = user.Move.MoveTargets;
         if(validMoveTargets.Count == 0) return false;
-        Debug.Log("move has valid targets");
 
         if(slot.AssignedCombatant == user){
-            Debug.Log("Target is self");
-
-            if(validMoveTargets.Contains("Self")) return true;
-            if(validMoveTargets.Contains("Party")) return true;
+                    if(validMoveTargets.Contains("Self")) return true;
+                    if(validMoveTargets.Contains("Party")) return true;
         } else {
-            Debug.Log("Target is not self");
-            if(slot.AssignedCombatant.isAlly){
-                Debug.Log("Target is ally");
+            if(slot.AssignedCombatant.IsAlly){
                 if(slot.AssignedCombatant.HasDied){
-                    Debug.Log("Target is dead");
                     if(validMoveTargets.Contains("DeadAlly")) return true;
                 } else {
-                    Debug.Log("Target is not dead");
                     if(validMoveTargets.Contains("Party")) return true;
                     if(validMoveTargets.Contains("Ally")) return true;
                 }
             } else {
-                Debug.Log("Target is not ally");
-                if(validMoveTargets.Contains("Single")) return true;
-                if(validMoveTargets.Contains("Spread")) return true;
+                    if(validMoveTargets.Contains("Single")) return true;
+                    if(validMoveTargets.Contains("Spread")) return true;
             }
         }
 
         return false;
     }
 
-    public void Process(Combatant user){
-        if(user.HasDied) return;
+    public void Process(Combatant user, CombatantHandler combatantHandler, CombatViewHandler viewHandler){
+        if(IsProcessingMove) return;
 
         IsProcessingMove = true;
-        StartCoroutine(ProcessMove(user));
+        StartCoroutine(ProcessMove(user, combatantHandler, viewHandler));
     }
 
-    private void Initialize(){
+    public void Initialize(){
         _moveEffectDict.Clear();
 
         foreach(TagEffectTracker tracker in _moveTagEffects)
             _moveEffectDict.Add(tracker.MoveTag, tracker.MoveEffect);
-    }
-
-    public static MoveProcessor Instance { get; private set;}
-    void Start() {
-        if(Instance == null)
-            Instance = this;
-        else
-            Destroy(this);
-
-        Initialize();
-    }
-    void OnDestroy(){
-        if(Instance == this)
-            Instance = null;
     }
 }

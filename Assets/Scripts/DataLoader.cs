@@ -28,12 +28,14 @@ public class DataLoader : MonoBehaviour
 
     public UnitData GetUnitData(String unitTag){
         if(!_unitDict.ContainsKey(unitTag)) return null;
+        if(unitTag.CompareTo("") == 0)      return null;
 
         return _unitDict[unitTag];
     }
 
     public MoveData GetMoveData(String moveTag){
-        if(!_movesDict.ContainsKey(moveTag)) return null;
+        if(moveTag.CompareTo("") == 0)          return null;
+        if(!_movesDict.ContainsKey(moveTag))    return null;
 
         return _movesDict[moveTag];
     }
@@ -138,10 +140,6 @@ public class DataLoader : MonoBehaviour
         Debug.Log($"[DEBUG]: Finished outputting move files to \"{Application.streamingAssetsPath + MOVES_FILEPATH}\"");
     }
 
-    private void Setup(){
-        
-    }
-
     private void DebugUpdate(){
         if(_debugLoadUnits){
             _debugLoadUnits = false;
@@ -175,8 +173,6 @@ public class DataLoader : MonoBehaviour
         } else {
             Destroy(this);
         }
-
-        Setup();
     }
     void OnDestroy(){
         if(Instance == this)

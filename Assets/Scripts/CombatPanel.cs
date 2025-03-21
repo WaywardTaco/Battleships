@@ -4,49 +4,40 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CombatPanel : MonoBehaviour
+public class CombatPanel : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private TMP_Text _descriptionText;
-    [SerializeField] private List<ActionButton> _actionButtons = new();
-
-    public void ActionButtonCallback(ActionButton button){
-        if(button.AssignedMove.CompareTo("") != 0){
-            CombatManager.Instance.SelectMove(button.AssignedMove);
-        }
+    [Serializable] public class BattleInfoPanel {
+        public GameObject gameObject;
+        public TMP_Text RoundCounter;
+    }
+    [Serializable] public class MoveFeedbackPanel {
+        public GameObject gameObject;
+        public TMP_Text FeedbackText;
+    }
+    [Serializable] public class TurnPanel {
+        public GameObject gameObject;
+        public TMP_Text MoveDescriptionText;
+        public List<ActionButton> ActionButtons = new();
+    }
+    [Serializable] public class WaitingEnemyPanel {
+        public GameObject gameObject;
+        public TMP_Text AwaitingText;
+    }
+    [Serializable] public class StatPanel {
+        public GameObject gameObject;
+        public TMP_Text HpText;
+        public TMP_Text SpText;
     }
 
-    public void LoadButtonInfo(Combatant combatant, List<String> moveTags){
-        foreach(ActionButton button in _actionButtons){
-            button.AssignedMove = "";
-        }
+    public BattleInfoPanel InfoPanel;
+    public StatPanel StatPopup;
+    public TurnPanel PlayerTurnPanel;
+    public MoveFeedbackPanel FeedbackPanel;
+    public WaitingEnemyPanel AwaitingEnemyPanel;
 
-        for(int i = 0; i < moveTags.Count && i < _actionButtons.Count; i++){
-            _actionButtons[i].AssignedMove = moveTags[i];
-            
-            MoveData data = DataLoader.Instance.GetMoveData(moveTags[i]);
-            if(data != null){
-                _actionButtons[i].MoveCost 
-                    = data.MoveCostBase + (int)(combatant.Level * data.MoveCostGrowthRate);
-            } else {
-                _actionButtons[i].MoveCost = 0;
-            }
-        }
-    }   
-
-    public void ActionButtonHover(ActionButton button, bool isHoveredOn){
-        if(!isHoveredOn){
-            _descriptionText.text = "";
-            return;
-        }
-        
-        if(button.AssignedMove.CompareTo("") != 0){
-            MoveData data = DataLoader.Instance.GetMoveData(button.AssignedMove);
-            if(data == null)
-                _descriptionText.text = "";
-            else
-                _descriptionText.text = data.MoveDescription;
-        }
+    public void OnPointerClick(PointerEventData eventData){
+        CombatManager.Instance.ClickOffCallback();
     }
-
 }
