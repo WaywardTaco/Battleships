@@ -21,16 +21,29 @@ public class CombatViewHandler : MonoBehaviour
 
     public Vector3 HIGHLIGHTED_SLOT_SIZE_SCALER;
     [SerializeField] private CombatPanel _combatPanel;
-    [SerializeField] private CameraInfo Camera;
+    [SerializeField] private CameraInfo _camera;
     private CombatPhase _currentPhase = CombatPhase.None;
     public CombatantSlot FocusingSlot { get; private set; }
 
     public void FocusSlot(CombatantSlot slot){
-        
+        FocusingSlot = slot;
+        SetCamera(slot.GetSlotTag(), false, true);
     }
 
     public void HoverSlot(CombatantSlot slot, bool isHoveredOn){
+        _combatPanel.StatPopup.gameObject.SetActive(isHoveredOn);
+        if(isHoveredOn){
+            _combatPanel.StatPopup.HpText.text = $"{slot.AssignedCombatant.CurrentHealth}/{slot.AssignedCombatant.MaxHP}";
+            _combatPanel.StatPopup.SpText.text = $"{slot.AssignedCombatant.CurrentStamina}/{slot.AssignedCombatant.MaxSP}";
+        }
+    }
 
+    public void HoverAction(ActionButton action, bool isHoveredOn){
+        if(!isHoveredOn){
+            _combatPanel.PlayerTurnPanel.MoveDescriptionText.text = "";
+        } else {
+            _combatPanel.PlayerTurnPanel.MoveDescriptionText.text = action.AssignedMove.MoveDescription;
+        }
     }
 
     public void SetRoundInfo(int currentRound){
@@ -42,11 +55,23 @@ public class CombatViewHandler : MonoBehaviour
     }   
 
     public void SetMovePanelInfo(Combatant unit){
-        foreach(ActionButton moveButton in _combatPanel.PlayerTurnPanel.ActionButtons){
-            moveButton.AssignedMove = unit.Move;
-            moveButton.MoveNameText.text = unit.Move.MoveName;
+        if(unit == null) return;
+
+        int buttonCount = _combatPanel.PlayerTurnPanel.ActionButtons.Count;
+        int moveCount = unit.Info.MoveList.Count;
+        for(int i = 0 ; i < buttonCount && i < moveCount; i++){
+            ActionButton moveButton = _combatPanel.PlayerTurnPanel.ActionButtons[i];
+            MoveData move = DataLoader.Instance.GetMoveData(unit.Info.MoveList[i]);
+
+            if(move == null){
+                Debug.LogWarning($"[WARN]: Trying to load bad move {unit.Info.MoveList[i]}");
+                continue;
+            }
+
+            moveButton.AssignedMove = move;
+            moveButton.MoveNameText.text = move.MoveName;
             moveButton.MoveCostText.text = 
-                $"{unit.Move.MoveCostBase + (int)((float)unit.Level * unit.Move.MoveCostGrowthRate)}SP";
+                $"{move.MoveCostBase + (int)((float)unit.Level * move.MoveCostGrowthRate)}SP";
         }
     }
 
@@ -74,25 +99,25 @@ public class CombatViewHandler : MonoBehaviour
         SetCameraControl(cameraControllable);
     }
     private void MoveCameraTo(String camPosition, bool isPriority = false, bool updateDefaultPosition = false){
-        if(Camera.CurrentPosition.CompareTo(camPosition) == 0)
+        if(_camera.CurrentPosition.CompareTo(camPosition) == 0)
             return;
         
-        if(!updateDefaultPosition && !Camera.IsControllable) 
+        if(!updateDefaultPosition && !_camera.IsControllable) 
             return;
         
         if(updateDefaultPosition)
-            Camera.DefaultPosition = camPosition;
+            _camera.DefaultPosition = camPosition;
 
-        Camera.CurrentPosition = camPosition;
-        Camera.Camera.MoveCamTo(Camera.SlotsDict[camPosition], isPriority);
+        _camera.CurrentPosition = camPosition;
+        _camera.Camera.MoveCamTo(_camera.SlotsDict[camPosition], isPriority);
     }
     private void SetCameraControl(bool value){
-        Camera.IsControllable = value;
+        _camera.IsControllable = value;
         if(!value) ResetCamView();
     }
 
-    private void ResetCamView(bool isPriority = false){
-        MoveCameraTo(Camera.DefaultPosition, isPriority);
+    public void ResetCamView(bool isPriority = false){
+        MoveCameraTo(_camera.DefaultPosition, isPriority);
     }
 
 
@@ -108,19 +133,18 @@ public class CombatViewHandler : MonoBehaviour
     private void InitializeCameraSlots(List<CombatantSlot> combatantSlots){
         foreach(CombatantSlot slot in combatantSlots){
             if(slot.GetCamPosition() != null)
-                Camera.SlotsDict.Add(slot.GetSlotTag(), slot.GetCamPosition());
+                _camera.SlotsDict.Add(slot.GetSlotTag(), slot.GetCamPosition());
         }
 
-        foreach(CameraSlot slot in Camera.CameraSlots){
+        foreach(CameraSlot slot in _camera.CameraSlots){
             if(slot.Transform != null)
-                Camera.SlotsDict.Add(slot.SlotTag, slot.Transform);
+                _camera.SlotsDict.Add(slot.SlotTag, slot.Transform);
         }
     }
 
     public void SetView(CombatPhase currentPhase, CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
         _currentPhase = currentPhase;
-        SetView(phaseHandler, combatantHandler);
-        
+        SetView(phaseHandler, combatantHandler);   
     }
 
     public void SetView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
@@ -130,6 +154,7 @@ public class CombatViewHandler : MonoBehaviour
             case CombatPhase.Round_Start:               SetRoundStartView(phaseHandler, combatantHandler);            break;
             case CombatPhase.Turn_Start:                SetTurnStartView(phaseHandler, combatantHandler);             break;
             case CombatPhase.Waiting_For_Player_Move:   SetWaitingPlayerMoveView(phaseHandler, combatantHandler);     break;
+            case CombatPhase.Waiting_Player_Target:     SetWaitingPlayerTarget(phaseHandler, combatantHandler);       break;
             case CombatPhase.Turn_Ending:               SetTurnEndView(phaseHandler, combatantHandler);               break;
             case CombatPhase.Waiting_Enemy_Submit:      SetWaitingEnemySubmitView(phaseHandler, combatantHandler);    break;
             case CombatPhase.Processing_Moves:          SetProcessingMovesView(phaseHandler, combatantHandler);       break;
@@ -157,32 +182,37 @@ public class CombatViewHandler : MonoBehaviour
     private void SetRoundStartView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
         SetCamera("Overhead", true, false);
         SetRoundInfo((int) phaseHandler.RoundCount);
+        _combatPanel.InfoPanel.gameObject.SetActive(true);
     }
     private void SetRoundEndView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
         SetCamera("Overhead", true, false);
     }
     private void SetTurnStartView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-        SetCamera(phaseHandler.TurnUnitSlot.GetSlotTag(), true, false);
+        SetCamera("Overhead", true, false);
         SetMovePanelInfo(phaseHandler.TurnUnit);
+        _combatPanel.AwaitingEnemyPanel.gameObject.SetActive(false);
+        _combatPanel.PlayerTurnPanel.gameObject.SetActive(true);
     }
     private void SetWaitingPlayerMoveView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-
+        SetCamera(phaseHandler.TurnUnitSlot.GetSlotTag(), true, false);
+    }
+    private void SetWaitingPlayerTarget(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
+        SetCamera("Overhead", true, true);
     }
     private void SetTurnEndView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-
+        _combatPanel.PlayerTurnPanel.gameObject.SetActive(false);
     }
     private void SetWaitingEnemySubmitView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-        MoveCameraTo("Overhead", true, true);
-        SetCameraControl(true);
+        SetCamera("Overhead", true, true);
+        _combatPanel.AwaitingEnemyPanel.gameObject.SetActive(true);
     }
     private void SetProcessingMovesView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-        
-        MoveCameraTo("Overhead", true, true);
-        SetCameraControl(true);
+        SetCamera("Overhead", true, true);
+        _combatPanel.AwaitingEnemyPanel.gameObject.SetActive(false);
+        _combatPanel.FeedbackPanel.gameObject.SetActive(true);
     }
     private void SetProcessingMovesEndView(CombatPhaseHandler phaseHandler, CombatantHandler combatantHandler){
-        
-        MoveCameraTo("Overhead", true, true);
-        SetCameraControl(true);
+        SetCamera("Overhead", true, true);
+        _combatPanel.FeedbackPanel.gameObject.SetActive(false);
     }
 }

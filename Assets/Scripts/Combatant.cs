@@ -30,10 +30,11 @@ using UnityEngine;
     public MoveData Move {
         get { return DataLoader.Instance.GetMoveData(MoveTag); }
     }
-    public bool HasMoveAndTarget {
-        get {
-            return MoveTag.CompareTo("") != 0 && TargetSlotTag.CompareTo("") != 0;
-        }
+    public bool HasMove {
+         get { return MoveTag.CompareTo("") != 0; }
+    }
+    public bool HasTarget {
+        get { return TargetSlotTag.CompareTo("") != 0; }
     }
     public Sprite GetSprite(int index){
         return DataLoader.Instance.GetUnitSprite(Info.SpriteList[index]);

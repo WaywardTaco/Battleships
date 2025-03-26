@@ -9,6 +9,7 @@ public abstract class IMoveEffect : ScriptableObject {
 [CreateAssetMenu(fileName = "New Effect", menuName = "Scriptables/MoveEffects/Attack", order = 0)]
 public class Attack : IMoveEffect {
     public override void Use(Combatant user, Combatant target, MoveProcessor processor){
+        
         bool isSpecial = false;
         if(user.Move.MoveKind.CompareTo("Special") == 0) isSpecial = true;
 
@@ -23,6 +24,7 @@ public class Attack : IMoveEffect {
 
         int damage = (int)(power / 10.0f);
         target.DealDamage(damage);
+        Debug.Log($"{user.UnitTag} used an attack on {target.UnitTag} and dealt {damage} damage!");
 
         processor.FinishedMoveProcessCallback();
     }

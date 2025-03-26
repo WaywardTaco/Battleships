@@ -7,8 +7,11 @@
   "MoveTargets": [
     "Ally"
   ],
-  "MoveEffect": [],
+  "MoveEffect": [
+    "Attack"
+  ],
   "MovePower": 5,
+  "MovePriority": 0,
   "MoveCostBase": 12,
   "MoveCostGrowthRate": 0.2
 }

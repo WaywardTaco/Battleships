@@ -1,6 +1,22 @@
 {
   "UnitTag": "Frank",
   "UnitName": "Frank",
+  "HP_Base": 10,
+  "HP_Growth": 5.0,
+  "SP_Base": 0,
+  "SP_Growth": 0.0,
+  "ATK_Base": 1,
+  "ATK_Growth": 1.0,
+  "DEF_Base": 0,
+  "DEF_Growth": 0.0,
+  "SPA_Base": 0,
+  "SPA_Growth": 0.0,
+  "SPD_Base": 0,
+  "SPD_Growth": 0.0,
+  "SPE_Base": 0,
+  "SPE_Growth": 0.0,
+  "Resistances": [],
+  "Weaknesses": [],
   "SpriteList": [
     "Frank.png",
     "FrankBack.png"
@@ -8,7 +24,6 @@
   "MoveList": [
     "MoveA",
     "MoveB",
-    "MoveC",
-    ""
+    "MoveC"
   ]
 }

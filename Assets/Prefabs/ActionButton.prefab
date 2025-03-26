@@ -150,11 +150,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 1
+  m_MinWidth: 0
   m_MinHeight: -1
-  m_PreferredWidth: 1
+  m_PreferredWidth: 10
   m_PreferredHeight: -1
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 0
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!1 &7093574578346181638
@@ -307,11 +307,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 0
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 320
   m_PreferredHeight: -1
-  m_FlexibleWidth: 1
+  m_FlexibleWidth: 0
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!1 &9010858273640817793
@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 1520622969828286831}
   - component: {fileID: 4254601430890503235}
   - component: {fileID: 1681387452175057645}
+  - component: {fileID: 5793230006761174813}
   m_Layer: 5
   m_Name: ActionButton
   m_TagString: Untagged
@@ -476,10 +477,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a3c8990eb816249b229dd28adcf9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AssignedMove: 
-  MoveCost: 0
-  _moveNameText: {fileID: 7988039538480188798}
-  _moveCostText: {fileID: 8902421657228933087}
-  _HoverCallbackHandler:
-    m_PersistentCalls:
-      m_Calls: []
+  MoveNameText: {fileID: 7988039538480188798}
+  MoveCostText: {fileID: 8902421657228933087}
+  AssignedMove:
+    MoveTag: 
+    MoveName: 
+    MoveDescription: 
+    MoveKind: 
+    MoveType: 
+    MoveTargets: []
+    MoveEffect: []
+    MovePower: 0
+    MovePriority: 0
+    MoveCostBase: 0
+    MoveCostGrowthRate: 0
+--- !u!114 &5793230006761174813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9010858273640817793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 0
+  m_PreferredWidth: -1
+  m_PreferredHeight: 100
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 0
+  m_LayoutPriority: 1

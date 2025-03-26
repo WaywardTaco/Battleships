@@ -5,7 +5,7 @@ using UnityEngine;
 public enum CombatPhase {
     None, Combat_Start, Combat_End, 
     Round_Start, Waiting_Enemy_Submit, Round_Ending, Round_Ended,
-    Turn_Start, Waiting_For_Player_Move, Turn_Ending, Turn_Ended,
+    Turn_Start, Waiting_For_Player_Move, Waiting_Player_Target, Turn_Ending, Turn_Ended,
     Processing_Moves, Process_Moves_Ending,
 }
 public class CombatPhaseHandler : MonoBehaviour
@@ -37,11 +37,15 @@ public class CombatPhaseHandler : MonoBehaviour
             return 
                 _currentPhase == CombatPhase.Turn_Start ||
                 _currentPhase == CombatPhase.Waiting_For_Player_Move ||
+                _currentPhase == CombatPhase.Waiting_Player_Target ||
                 _currentPhase == CombatPhase.Turn_Ending;
         }
     }
     public bool IsWaitingPlayerMove {
         get { return _currentPhase == CombatPhase.Waiting_For_Player_Move;}
+    }
+    public bool IsWaitingTargetSelect {
+        get { return _currentPhase == CombatPhase.Waiting_Player_Target;}
     }
 
     public Combatant TurnUnit{ 
@@ -137,10 +141,21 @@ public class CombatPhaseHandler : MonoBehaviour
         CombatManager.Instance.UpdateView(_currentPhase);
 
         // Keeps the player 'in the turn' while they are considered in it (ie. they have but have not selected a valid move)
-        _currentPhase = CombatPhase.Waiting_For_Player_Move;
-        CombatManager.Instance.UpdateView(_currentPhase);
-        while(!(TurnUnit.HasDied || TurnUnit.HasMoveAndTarget)) 
+        while(!(TurnUnit.HasDied || (TurnUnit.HasMove && TurnUnit.HasTarget))){
+            if(!IsWaitingPlayerMove && !TurnUnit.HasMove){
+                /* MOVE SELECT CODE */
+                _currentPhase = CombatPhase.Waiting_For_Player_Move;
+                CombatManager.Instance.UpdateView(_currentPhase); 
+            }
+
+            if(!IsWaitingTargetSelect && TurnUnit.HasMove && !TurnUnit.HasTarget){
+                /* TARGET SELECT MODE */
+                _currentPhase = CombatPhase.Waiting_Player_Target;
+                CombatManager.Instance.UpdateView(_currentPhase);
+            }
+
             yield return new WaitForEndOfFrame();
+        }
         
         /* END OF TURN CODE */
         _currentPhase = CombatPhase.Turn_Ending;
@@ -163,7 +178,7 @@ public class CombatPhaseHandler : MonoBehaviour
             return false;
         }
 
-        return _debugEndCombat;
+        return _combatantHandler.IsEnemyDead || _combatantHandler.IsPlayerDead;
     }
     
     public void Initialize(CombatantHandler combatantHandler, MoveProcessor moveProcessor, CombatViewHandler viewHandler){

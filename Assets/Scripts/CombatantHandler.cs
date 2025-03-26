@@ -30,7 +30,7 @@ public class CombatantHandler : MonoBehaviour
         get {
             if(_debugEnemySubmittedMoves){
                 _debugEnemySubmittedMoves = false;
-                return _debugEnemySubmittedMoves;
+                return true;
             }
 
             int aliveUnitCount = 0;
@@ -38,6 +38,24 @@ public class CombatantHandler : MonoBehaviour
                 if(!unit.HasDied) aliveUnitCount++;
             
             return _enemySubmittedMovesCount >= aliveUnitCount;
+        }
+    }
+
+    public bool IsPlayerDead {
+        get {
+            foreach(Combatant unit in _playerTeam)
+                if(!unit.HasDied) return false;
+            
+            return true;
+        }
+    }
+    
+    public bool IsEnemyDead {
+        get {
+            foreach(Combatant unit in _enemyTeam)
+                if(!unit.HasDied) return false;
+            
+            return true;
         }
     }
 
@@ -58,8 +76,16 @@ public class CombatantHandler : MonoBehaviour
 
     public void SubmitMove(Combatant unit, MoveData move){
         unit.MoveTag = move.MoveTag;
+    }
+
+    public void SubmitTarget(Combatant unit, CombatantSlot target){
+        unit.TargetSlotTag = target.GetSlotTag();
         if(unit.IsAlly) _playerSubmittedMovesCount++;
         else            _enemySubmittedMovesCount++;
+    }
+
+    public void ResetMove(Combatant unit){
+        unit.MoveTag = "";
     }
 
     /// <summary>
@@ -82,6 +108,7 @@ public class CombatantHandler : MonoBehaviour
         _combatantMoveOrder.Sort(
             delegate(Combatant unitA, Combatant unitB){
                 if(unitB.Move == null) return -1;
+                if(unitA.Move == null) return 1;
 
                 if(unitB.Move.MovePriority == unitA.Move.MovePriority){
                     if(unitB.CurrentSpeed() == unitA.CurrentSpeed()){
