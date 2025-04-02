@@ -31,6 +31,7 @@ public class MoveProcessor : MonoBehaviour
             do{
                 if(!_isProcessingEffect){
                     _isProcessingEffect = true;
+                    Debug.Log($"[DEBUG]: Processing effect {workingEffectIndex} for effect {user.Move.MoveEffect[workingEffectIndex]}");
                     _moveEffectDict[user.Move.MoveEffect[workingEffectIndex]].Use(user, target, this);
                 }
 

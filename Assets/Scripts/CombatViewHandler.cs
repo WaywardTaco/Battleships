@@ -25,6 +25,12 @@ public class CombatViewHandler : MonoBehaviour
     private CombatPhase _currentPhase = CombatPhase.None;
     public CombatantSlot FocusingSlot { get; private set; }
 
+    public String LookingAt { 
+        get {
+            return _camera.CurrentPosition;
+        } 
+    }
+
     public void FocusSlot(CombatantSlot slot){
         FocusingSlot = slot;
         SetCamera(slot.GetSlotTag(), false, true);
@@ -94,7 +100,7 @@ public class CombatViewHandler : MonoBehaviour
     }
 
     /* CAMERA CONTROL */
-    private void SetCamera(String camPosition, bool updateDefaultPosition, bool cameraControllable){
+    public void SetCamera(String camPosition, bool updateDefaultPosition, bool cameraControllable){
         MoveCameraTo(camPosition, true, updateDefaultPosition);
         SetCameraControl(cameraControllable);
     }

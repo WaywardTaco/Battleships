@@ -25,8 +25,11 @@ public class CombatManager : MonoBehaviour {
     }
 
     public void SlotClickCallback(CombatantSlot slot){
-        if(_viewHandler.FocusingSlot != slot){
-            _viewHandler.FocusSlot(slot);
+        if(_phaseHandler.IsWaitingPlayerMove){
+            if(_viewHandler.LookingAt.CompareTo("Overhead") == 0)
+                _viewHandler.ResetCamView();
+            else
+                _viewHandler.SetCamera("Overhead", false, true);
         }
 
         else if (_phaseHandler.IsWaitingTargetSelect){
@@ -66,7 +69,7 @@ public class CombatManager : MonoBehaviour {
             return;
         }
 
-        if(!_phaseHandler.IsWaitingPlayerMove){
+        if(!_phaseHandler.IsWaitingPlayerMove && !_phaseHandler.IsWaitingTargetSelect){
             Debug.LogWarning("[WARN]: Trying to submit move while not waiting for a move");
             return;
         }
