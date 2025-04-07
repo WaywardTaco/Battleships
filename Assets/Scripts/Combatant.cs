@@ -98,4 +98,26 @@ using UnityEngine;
         if(CurrentHealth > 0 && doesRevive) 
             HasDied = false;
     }
+
+    public void UpdateMoveSubmission(MovesSubmissionStruct.MoveSubmission submission){
+        if(UnitTag.CompareTo(submission.UnitTag) != 0) 
+            return;
+
+        MoveTag = submission.MoveTag;
+        TargetSlotTag = submission.TargetSlotTag;
+    }
+
+    public void UpdateStatus(BattleStatusStruct.CombatantStatus status){
+        if(UnitTag.CompareTo(status.UnitTag) != 0) 
+            return;
+
+        CurrentHealth = status.CurrentHealth;
+        CurrentStamina = status.CurrentStamina;
+        ATKStage = status.ATKStage;
+        SPAStage = status.SPAStage;
+        DEFStage = status.DEFStage;
+        SPDStage = status.SPDStage;
+        SPEStage = status.SPEStage;
+        HasDied = status.HasDied;
+    }
 }

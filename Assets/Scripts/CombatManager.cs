@@ -20,6 +20,18 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(_phaseHandler.PlayCombat());
     }
 
+    public void SubmitTeam(string data, bool isAlly){
+
+    }
+
+    public void SubmitEnemyMoves(string data){
+
+    }
+
+    public void UpdateStatus(string data){
+        
+    }
+
     public void UpdateView(CombatPhase currentPhase){
         _viewHandler.SetView(currentPhase, _phaseHandler, _combatantHandler);
     }
