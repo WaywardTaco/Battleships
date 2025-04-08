@@ -103,6 +103,10 @@ public class NetworkManager : MonoBehaviour
         if(task.IsCompletedSuccessfully)
             _connectionSocket = task.Result;
 
+        while(!_appHandshakeVerified){
+            await ProcessServer(await ReadMessage());
+        }
+
         // Run Server asyncronously
         _ = RunServer();
 
