@@ -30,14 +30,14 @@ public class NetworkManager : MonoBehaviour
     private bool _appHandshakeVerified = false;
     
     /* GAMEPLAY LOGIC RELATED */
-    public async Task SendTeamAsync(TeamStruct team){
-        if(team == null) return;
+    public async Task<bool> SendTeamAsync(TeamStruct team){
+        if(team == null) return false;
         string data = JsonConvert.SerializeObject(team, Formatting.None);
 
-        if (string.IsNullOrEmpty(data)) return;
+        if (string.IsNullOrEmpty(data)) return false;
         string toSend = TEAM + data + EOM;
 
-        await SendData(toSend);
+        return await SendData(toSend);
     }
 
     public async Task SendMoves(MovesSubmissionStruct moves){
@@ -66,7 +66,8 @@ public class NetworkManager : MonoBehaviour
     /// External interface to tell the network manager to close the connection
     /// </summary>
     public void CloseConnection(){
-        _shouldCloseConnection = true;
+        if(IsConnectionStarted)
+            _shouldCloseConnection = true;
     }
 
     /// <summary>
@@ -94,6 +95,13 @@ public class NetworkManager : MonoBehaviour
         // Set the network manager's status as a server
         IsServer = true;
         Debug.Log($"[NETWORK-DEBUG]: Established server at {_welcomeSocket.LocalEndPoint} (Port: {portNumber})");
+        
+        // Listen to one connection request, assign to connection socket, and verify application level handshake
+        _welcomeSocket.Listen(1);
+        Task<Socket> task = _welcomeSocket.AcceptAsync();
+        await task;
+        if(task.IsCompletedSuccessfully)
+            _connectionSocket = task.Result;
 
         // Run Server asyncronously
         _ = RunServer();
@@ -146,20 +154,18 @@ public class NetworkManager : MonoBehaviour
     /* PRIVATE FUNCTIONS */
     private async Task RunServer(){
         // Runs server until connection close flag is called
-        while(!_shouldCloseConnection){
-            // Listen to one connection request, assign to connection socket, and verify application level handshake
-            _welcomeSocket.Listen(1);
-            _connectionSocket = await _welcomeSocket.AcceptAsync();
+        // while(!_shouldCloseConnection){
 
             // Reads messages from the server and processes them one by one as long as connection should not close and there is a connection
             while(!_shouldCloseConnection && _connectionSocket != null){
                 await ProcessServer(await ReadMessage());
             }
-        }
+        // }
         
         // Closing server welcome socket
         Debug.Log($"[NETWORK-DEBUG]: Closing server at {_welcomeSocket.LocalEndPoint}");
         await SendCloseConnectionHandshake();
+        _welcomeSocket.Close();
         CleanupConnections();
     }
 
@@ -173,7 +179,7 @@ public class NetworkManager : MonoBehaviour
         // Closing connection socket
         Debug.Log($"[NETWORK-DEBUG]: Closing connection to server via {_connectionSocket.RemoteEndPoint}");
         await SendCloseConnectionHandshake();
-        _connectionSocket.Shutdown(SocketShutdown.Both);
+        _connectionSocket.Close();
         CleanupConnections();
     }
 
@@ -213,7 +219,7 @@ public class NetworkManager : MonoBehaviour
                 team = JsonConvert.DeserializeObject<TeamStruct>(response);
                 if(team == null) break;
 
-                CombatManager.Instance.SubmitTeam(team, false);
+                _ = CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
 
@@ -250,7 +256,7 @@ public class NetworkManager : MonoBehaviour
                 team = JsonConvert.DeserializeObject<TeamStruct>(response);
                 if(team == null) break;
 
-                CombatManager.Instance.SubmitTeam(team, false);
+                _ = CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
 
@@ -399,14 +405,30 @@ public class NetworkManager : MonoBehaviour
         return endpoint;
     }
 
+    public void CloseConnections(){
+        _connectionSocket?.Close();
+        _welcomeSocket?.Close();
+    }
+
     private void CleanupConnections(){
         _connectionSocket = null;
         
         _welcomeSocket = null;
+        
         IsServer = false;
         _appHandshakeVerified = false;
     
         _shouldCloseConnection = false;
+
+
+    }
+
+    private bool IsConnectionStarted{
+        get {
+            return 
+                (IsServer && _welcomeSocket != null) ||
+                _connectionSocket != null;
+        }
     }
 
     private string GetMessagePrefix(ref string data){
@@ -434,19 +456,13 @@ public class NetworkManager : MonoBehaviour
 
     /* SINGLETON CODE */
     public static NetworkManager Instance { get; private set;}
-    async Task Start()
+    void Start()
     {
         if(Instance == null){
             Instance = this;
         } else {
             Destroy(this);
         }
-
-        var hostname = Dns.GetHostName();
-        IPHostEntry localhost = await Dns.GetHostEntryAsync(hostname);
-        IPAddress address = localhost.AddressList[0];
-
-        Debug.Log($"[SERVER-DEBUG]: {hostname}, {localhost.HostName}, {address}, {localhost.AddressList[1]}");
     }
     void OnDestroy()
     {

@@ -59,19 +59,30 @@ public class CombatantHandler : MonoBehaviour
         }
     }
 
-    public void SubmitTeam(Dictionary<String, int> teamUnits, bool isAlly){
+    public void SubmitTeam(List<Tuple<String, int>> teamUnits, bool isAlly){
         if(isAlly)  _playerTeam.Clear();
         else        _enemyTeam.Clear();
 
         foreach(var unit in teamUnits){
-            Combatant newUnit = new Combatant();
-            newUnit.UnitTag = unit.Key;
-            newUnit.Level = unit.Value;
-            newUnit.IsAlly = isAlly;
+            Combatant newUnit = new()
+            {
+                UnitTag = unit.Item1,
+                Level = unit.Item2,
+                IsAlly = isAlly
+            };
 
-            if(isAlly) _playerTeam.Add(newUnit);
+            if (isAlly) _playerTeam.Add(newUnit);
             else _enemyTeam.Add(newUnit);
         }
+    }
+
+    public bool HasEnemyTeam(){
+        foreach(Combatant unit in _enemyTeam){
+            if(String.IsNullOrEmpty(unit.UnitTag))
+                return false;
+        }
+
+        return true;
     }
 
     public void SubmitMove(Combatant unit, MoveData move){

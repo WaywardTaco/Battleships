@@ -10,6 +10,7 @@ public enum CombatPhase {
 }
 public class CombatPhaseHandler : MonoBehaviour
 {
+    [SerializeField] private GameMenus _gameMenuScript;
     private CombatPhase _currentPhase = CombatPhase.None;
     [SerializeField] private bool _debugStartCombat;
     [SerializeField] private bool _debugEndCombat;
@@ -57,10 +58,10 @@ public class CombatPhaseHandler : MonoBehaviour
 
     void Update()
     {
-        if(_debugStartCombat){
-            _debugStartCombat = false;
-            CombatManager.Instance.StartCombat();
-        }
+        // if(_debugStartCombat){
+        //     _debugStartCombat = false;
+        //     CombatManager.Instance.StartCombat();
+        // }
     }
 
     public IEnumerator PlayCombat(){
@@ -86,6 +87,9 @@ public class CombatPhaseHandler : MonoBehaviour
 
         _currentPhase = CombatPhase.None;
         CombatManager.Instance.UpdateView(_currentPhase);
+
+        if(_combatantHandler.IsEnemyDead) _gameMenuScript.GoToWinMenu();
+        else _gameMenuScript.GoToLoseMenu();
     }
     private IEnumerator PlayRound(){
         /* START OF ROUND CODE */

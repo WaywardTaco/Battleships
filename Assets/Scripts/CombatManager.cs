@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 public class CombatManager : MonoBehaviour {
     
@@ -21,17 +22,22 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(_phaseHandler.PlayCombat());
     }
 
-    public void SubmitTeam(TeamStruct team, bool isAlly){
-        Dictionary<String, int> handler = new();
+    public async Task<bool> SubmitTeam(TeamStruct team, bool isAlly){
+        List<Tuple<String, int>> handler = new();
         foreach(TeamStruct.TeamMember unit in team.Members){
-            handler.Add(unit.UnitTag, unit.Level);
+            handler.Add(new Tuple<String, int>(unit.UnitTag, unit.Level));
         }
 
         _combatantHandler.SubmitTeam(handler, isAlly);
 
         if(isAlly)
-            _ = NetworkManager.Instance.SendTeamAsync(team);
+            return await NetworkManager.Instance.SendTeamAsync(team);
         
+        return true;
+    }
+
+    public bool HasEnemyTeamBeenSubmitted(){
+        return _combatantHandler.HasEnemyTeam();
     }
 
     public void SubmitEnemyMoves(MovesSubmissionStruct moves){
