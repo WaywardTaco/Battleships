@@ -108,7 +108,7 @@ public class NetworkManager : MonoBehaviour
         }
 
         // Run Server asyncronously
-        _ = RunServer();
+        _ = Task.Run(() => RunServer());
 
         return true;   
     }
@@ -150,7 +150,7 @@ public class NetworkManager : MonoBehaviour
         Debug.Log($"[NETWORK-DEBUG]: Established server connection to {_connectionSocket.RemoteEndPoint} (Port: {portNumber})");
 
         // Run Client asyncronously
-        _ = RunClient();
+        _ = Task.Run(() => RunClient());
 
         return true;   
     }
@@ -391,11 +391,13 @@ public class NetworkManager : MonoBehaviour
         }
 
         if (response.IndexOf(EOM) <= -1){
-            Debug.Log("[NETWORK-DEBUG]: Received invalid response, include <|EOM|> to message");
+            Debug.Log($"[NETWORK-DEBUG]: Received invalid response, include <|EOM|> to message: {response}");
             return null;
         }
 
         response.Replace(EOM, "");
+        
+        Debug.Log($"[NETWORK-DEBUG]: Read message: {response}");
 
         return response;
     }
@@ -467,6 +469,8 @@ public class NetworkManager : MonoBehaviour
         } else {
             Destroy(this);
         }
+
+        CleanupConnections();
     }
     void OnDestroy()
     {

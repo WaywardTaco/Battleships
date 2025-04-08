@@ -106,7 +106,7 @@ public class GameMenus : MonoBehaviour{
             yield return new WaitUntil(() => task2.IsCompleted);
             if(!task2.Result){
                 GoToServerMenu();
-                yield return null;
+                yield break;
             }
 
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
@@ -136,7 +136,7 @@ public class GameMenus : MonoBehaviour{
             yield return new WaitUntil(() => task2.IsCompleted);
             if(!task2.Result){
                 GoToClientMenu();
-                yield return null;
+                yield break;
             }
 
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
