@@ -101,6 +101,7 @@ public class CombatPhaseHandler : MonoBehaviour
         }
 
         // Shifts to waiting enemy to submit view if enemy hasn't submitted
+        CombatManager.Instance.SendLocalPlayerMoves();
         while(!_combatantHandler.DidEnemySubmitMoves){
             if(_currentPhase != CombatPhase.Waiting_Enemy_Submit){
                 _currentPhase = CombatPhase.Waiting_Enemy_Submit;
@@ -122,6 +123,7 @@ public class CombatPhaseHandler : MonoBehaviour
         }
 
         /* END PROCESSING CODE */
+        CombatManager.Instance.SendLocalBattleStatus();
         _currentPhase = CombatPhase.Process_Moves_Ending;
         CombatManager.Instance.UpdateView(_currentPhase);
 

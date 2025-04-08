@@ -9,7 +9,10 @@ public class TeamStruct
         public int Level;
 
         public TeamMember(Combatant combatant){
-            
+            UnitTag = combatant.UnitTag;
+            Level = combatant.Level;
         }
     }
+    
+    public List<TeamMember> Members;
 }

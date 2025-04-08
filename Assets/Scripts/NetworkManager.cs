@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -24,30 +25,39 @@ public class NetworkManager : MonoBehaviour
     private const int MAX_SEND_DATA_RETRIES = 3;
     private const int CONNECTION_TIMEOUT_LIMIT = 60000;
 
-    private bool _isServer = false;
+    public bool IsServer = false;
     private bool _shouldCloseConnection = false;
     private bool _appHandshakeVerified = false;
     
     /* GAMEPLAY LOGIC RELATED */
-    public void SendTeam(string data){
+    public async Task SendTeamAsync(TeamStruct team){
+        if(team == null) return;
+        string data = JsonConvert.SerializeObject(team, Formatting.None);
+
         if (string.IsNullOrEmpty(data)) return;
         string toSend = TEAM + data + EOM;
 
-        SendData(toSend);
+        await SendData(toSend);
     }
 
-    public void SendMoves(string data){
+    public async Task SendMoves(MovesSubmissionStruct moves){
+        if(moves == null) return;
+        string data = JsonConvert.SerializeObject(moves, Formatting.None);
+
         if (string.IsNullOrEmpty(data)) return;
         string toSend = MOVES + data + EOM;
 
-        SendData(toSend);
+        await SendData(toSend);
     }
 
-    public void SendBattleStatus(string data){
+    public async Task SendBattleStatusAsync(BattleStatusStruct battleStatus){
+        if(battleStatus == null) return;
+        string data = JsonConvert.SerializeObject(battleStatus, Formatting.None);
+
         if (string.IsNullOrEmpty(data)) return;
         string toSend = STATUS + data + EOM;
 
-        SendData(toSend);
+        await SendData(toSend);
     }
 
     /* CONNECTION RELATED */
@@ -82,11 +92,11 @@ public class NetworkManager : MonoBehaviour
         }
 
         // Set the network manager's status as a server
-        _isServer = true;
+        IsServer = true;
         Debug.Log($"[NETWORK-DEBUG]: Established server at {_welcomeSocket.LocalEndPoint} (Port: {portNumber})");
 
         // Run Server asyncronously
-        RunServer();
+        _ = RunServer();
 
         return true;   
     }
@@ -115,7 +125,7 @@ public class NetworkManager : MonoBehaviour
         }
 
         // Set the network manager's status as client
-        _isServer = false;
+        IsServer = false;
 
         // Exchange Application Layer handshake
         _appHandshakeVerified = await SendHandshake(SYN);
@@ -128,7 +138,7 @@ public class NetworkManager : MonoBehaviour
         Debug.Log($"[NETWORK-DEBUG]: Established server connection to {_connectionSocket.RemoteEndPoint} (Port: {portNumber})");
 
         // Run Client asyncronously
-        RunClient();
+        _ = RunClient();
 
         return true;   
     }
@@ -193,13 +203,25 @@ public class NetworkManager : MonoBehaviour
         }
 
         if(response.CompareTo(ACK) == 0) return;
-        SendData(ACK, false);
+        _ = SendData(ACK, false);
 
         /* SERVER SIDE RECEIVING GAME LOGIC */
         switch(GetMessagePrefix(ref response)){
             case TEAM:
+                
+                TeamStruct team = null;
+                team = JsonConvert.DeserializeObject<TeamStruct>(response);
+                if(team == null) break;
+
+                CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
+
+                MovesSubmissionStruct moves = null;
+                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(response);
+                if(moves == null) break;
+
+                CombatManager.Instance.SubmitEnemyMoves(moves);
                 break;
         }
 
@@ -218,18 +240,33 @@ public class NetworkManager : MonoBehaviour
         }
 
         if(response.CompareTo(ACK) == 0) return;
-        SendData(ACK, false);
+        _ = SendData(ACK, false);
         
         /* CLIENT SIDE RECEIVING GAME LOGIC */
         switch(GetMessagePrefix(ref response)){
             case TEAM:
-                CombatManager.Instance.SubmitTeam(response, false);
+            
+                TeamStruct team = null;
+                team = JsonConvert.DeserializeObject<TeamStruct>(response);
+                if(team == null) break;
+
+                CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
-                CombatManager.Instance.SubmitEnemyMoves(response);
+
+                MovesSubmissionStruct moves = null;
+                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(response);
+                if(moves == null) break;
+
+                CombatManager.Instance.SubmitEnemyMoves(moves);
                 break;
             case STATUS:
-                CombatManager.Instance.UpdateStatus(response);
+            
+                BattleStatusStruct battleStatus = null;
+                battleStatus = JsonConvert.DeserializeObject<BattleStatusStruct>(response);
+                if(battleStatus == null) break;
+
+                CombatManager.Instance.UpdateStatus(battleStatus);
                 break;
         }
 
@@ -270,7 +307,7 @@ public class NetworkManager : MonoBehaviour
                     return true;
                 }
 
-                if(_isServer)   await ProcessServer(response);
+                if(IsServer)   await ProcessServer(response);
                 else            await ProcessClient(response);
             }
 
@@ -366,7 +403,7 @@ public class NetworkManager : MonoBehaviour
         _connectionSocket = null;
         
         _welcomeSocket = null;
-        _isServer = false;
+        IsServer = false;
         _appHandshakeVerified = false;
     
         _shouldCloseConnection = false;

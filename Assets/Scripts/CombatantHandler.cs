@@ -84,8 +84,42 @@ public class CombatantHandler : MonoBehaviour
         else            _enemySubmittedMovesCount++;
     }
 
+    public MovesSubmissionStruct ExtractPlayerMoves(){
+        MovesSubmissionStruct submission = new();
+        submission.MoveSubmissions = new();
+        foreach(Combatant unit in _playerTeam){
+            submission.MoveSubmissions.Add(new(unit));
+        }
+
+        return submission;
+    }
+
     public void ResetMove(Combatant unit){
         unit.MoveTag = "";
+    }
+
+    public void UpdateStatus(BattleStatusStruct battleStatus){
+        int clientCount = battleStatus.ClientCombatantStatuses.Count;
+        for(int i = 0 ; i < clientCount && i < _playerTeam.Count; i++)
+            _playerTeam[i].UpdateStatus(battleStatus.ClientCombatantStatuses[i]);
+
+        int serverCount = battleStatus.ServerCombatantStatuses.Count;
+        for(int i = 0 ; i < serverCount && i < _enemyTeam.Count; i++)
+            _enemyTeam[i].UpdateStatus(battleStatus.ServerCombatantStatuses[i]);
+        
+    }
+
+    public BattleStatusStruct ExtractBattleStatus(){
+        BattleStatusStruct battleStatus = new();
+        battleStatus.ServerCombatantStatuses = new();
+        foreach (Combatant unit in _playerTeam)
+            battleStatus.ServerCombatantStatuses.Add(new(unit));
+
+        battleStatus.ClientCombatantStatuses = new();
+        foreach (Combatant unit in _enemyTeam)
+            battleStatus.ClientCombatantStatuses.Add(new(unit));
+
+        return battleStatus;
     }
 
     /// <summary>

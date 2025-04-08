@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class CombatManager : MonoBehaviour {
     
@@ -20,16 +21,54 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(_phaseHandler.PlayCombat());
     }
 
-    public void SubmitTeam(string data, bool isAlly){
+    public void SubmitTeam(TeamStruct team, bool isAlly){
+        Dictionary<String, int> handler = new();
+        foreach(TeamStruct.TeamMember unit in team.Members){
+            handler.Add(unit.UnitTag, unit.Level);
+        }
 
-    }
+        _combatantHandler.SubmitTeam(handler, isAlly);
 
-    public void SubmitEnemyMoves(string data){
-
-    }
-
-    public void UpdateStatus(string data){
+        if(isAlly)
+            _ = NetworkManager.Instance.SendTeamAsync(team);
         
+    }
+
+    public void SubmitEnemyMoves(MovesSubmissionStruct moves){
+        int count = moves.MoveSubmissions.Count;
+        for(int i = 0; i < count; i++){
+
+            MovesSubmissionStruct.MoveSubmission move = moves.MoveSubmissions[i];
+            Combatant unit = _combatantHandler.GetCombatant(i, false);
+
+            _combatantHandler.SubmitMove(unit, DataLoader.Instance.GetMoveData(move.MoveTag));
+            _combatantHandler.SubmitTarget(unit, _combatantHandler.GetCombatantSlot(ConvertRemoteSlotTagToLocal(move.TargetSlotTag)));
+        }
+    }
+
+    public void SendLocalPlayerMoves(){
+        _ = NetworkManager.Instance.SendMoves(_combatantHandler.ExtractPlayerMoves());
+    }
+
+    public void SendLocalBattleStatus(){
+        _ = NetworkManager.Instance.SendBattleStatusAsync(_combatantHandler.ExtractBattleStatus());
+    }
+
+    private string ConvertRemoteSlotTagToLocal(string remoteSlotTag){
+        return remoteSlotTag switch
+        {
+            "P1" => "E1",
+            "P2" => "E2",
+            "P3" => "E3",
+            "E1" => "P1",
+            "E2" => "P2",
+            "E3" => "P3",
+            _ => "",
+        };
+    }
+
+    public void UpdateStatus(BattleStatusStruct battleStatus){
+        _combatantHandler.UpdateStatus(battleStatus);
     }
 
     public void UpdateView(CombatPhase currentPhase){
