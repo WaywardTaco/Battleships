@@ -21,7 +21,5 @@ public class Attack : IMoveEffect {
         int damage = (int)(power / 10.0f);
         target.DealDamage(damage);
         Debug.Log($"{user.UnitTag} used an attack on {target.UnitTag} and dealt {damage} damage!");
-
-        processor.FinishedMoveProcessCallback();
     }
 }

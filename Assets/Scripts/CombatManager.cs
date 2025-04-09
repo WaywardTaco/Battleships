@@ -22,6 +22,10 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(_phaseHandler.PlayCombat());
     }
 
+    public void FeedbackPanelClickCallback(){
+        _moveProcessor.FinishedMoveProcessCallback();
+    }
+
     public async Task<bool> SubmitTeam(TeamStruct team, bool isAlly){
         List<Tuple<String, int>> handler = new();
         foreach(TeamStruct.TeamMember unit in team.Members){
