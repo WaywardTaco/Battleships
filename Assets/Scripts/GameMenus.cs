@@ -114,12 +114,16 @@ public class GameMenus : MonoBehaviour{
             }
 
             Debug.Log("[NETWORK-DEBUG]: Team send success, awaiting enemy team submit ");
+            
+            Debug.Log($"[COMBATANTS]: Has enemy been received: {CombatManager.Instance.HasEnemyTeamBeenSubmitted()}");
 
             int awaitingTeamStartTime = DateTime.Now.Millisecond;
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
+                Debug.Log($"[COMBATANTS]: Has enemy been received: {CombatManager.Instance.HasEnemyTeamBeenSubmitted()}");
+
                 if(DateTime.Now.Millisecond - awaitingTeamStartTime > 6000){
                     Debug.Log("[NETWORK-DEBUG]: Enemy team send timeout");
-                    GoToClientMenu();
+                    GoToServerMenu();
                     yield break;
                 }
 
@@ -159,9 +163,13 @@ public class GameMenus : MonoBehaviour{
             }
 
             Debug.Log("[NETWORK-DEBUG]: Team sending success, waiting for enemy team");
+            
+            Debug.Log($"[COMBATANTS]: Has enemy been received: {CombatManager.Instance.HasEnemyTeamBeenSubmitted()}");
 
             int awaitingTeamStartTime = DateTime.Now.Millisecond;
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
+                Debug.Log($"[COMBATANTS]: Has enemy been received: {CombatManager.Instance.HasEnemyTeamBeenSubmitted()}");
+                
                 if(DateTime.Now.Millisecond - awaitingTeamStartTime > 6000){
                     Debug.Log("[NETWORK-DEBUG]: Enemy team timeout");
                     GoToClientMenu();

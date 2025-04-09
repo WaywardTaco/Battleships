@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviour
     public bool IsServer = false;
     private bool _shouldCloseConnection = false;
     private bool _appHandshakeVerified = false;
+    private int _receivedAckCount = 0;
     
     /* GAMEPLAY LOGIC RELATED */
     public async Task<bool> SendTeamAsync(TeamStruct team){
@@ -200,8 +201,14 @@ public class NetworkManager : MonoBehaviour
     /* PROCESSING MESSAGES RECEIVED */
     private async Task ProcessServer(string response){
         Debug.Log($"[NETWORK-DEBUG]: Processing server received: {response}");
+        if(response.CompareTo(ACK) == 0){
+            _receivedAckCount++;
+            return;
+        }
 
         if(!_appHandshakeVerified){
+
+            Debug.Log($"[NETWORK-DEBUG]: App handshake not yet established");
             if(response.CompareTo(SYN) == 0)
                 _appHandshakeVerified = await SendData(SYN_ACK);
             
@@ -214,14 +221,15 @@ public class NetworkManager : MonoBehaviour
             return;
         }
 
-        if(response.CompareTo(ACK) == 0) return;
         _ = SendData(ACK, false);
 
         /* SERVER SIDE RECEIVING GAME LOGIC */
         string prefix = GetMessagePrefix(response);
+        Debug.Log($"[NETWORK-DEBUG]: Processing server received message type: {prefix}");
         if(prefix == null) return;
         
         string trimmedResponse = TrimMessagePrefix(response, prefix);
+        Debug.Log($"[NETWORK-DEBUG]: Processing server received: {trimmedResponse}");
         switch(prefix){
             case TEAM:
                 
@@ -258,7 +266,10 @@ public class NetworkManager : MonoBehaviour
             return;
         }
 
-        if(response.CompareTo(ACK) == 0) return;
+        if(response.CompareTo(ACK) == 0){
+            _receivedAckCount++;
+            return;
+        }
         _ = SendData(ACK, false);
         
         /* CLIENT SIDE RECEIVING GAME LOGIC */
@@ -324,17 +335,20 @@ public class NetworkManager : MonoBehaviour
 
             if(!awaitACK) return true;
 
+            int ackCountAtSend = _receivedAckCount;
             int dataSentTime = DateTime.Now.Millisecond;
             while(DateTime.Now.Millisecond - dataSentTime < CONNECTION_TIMEOUT_LIMIT){
                 string response = await ReadMessage();
+                if(IsServer)    await ProcessServer(response);
+                else            await ProcessClient(response);
 
-                if(response.CompareTo(ACK) == 0){
+                if(_receivedAckCount > ackCountAtSend && _receivedAckCount >= 1){
+                    if(_receivedAckCount - 1 >= 0)
+                        _receivedAckCount--;
                     Debug.Log($"[NETWORK-DEBUG]: Successful message sent to connection \"{data}\"");
                     return true;
                 }
 
-                if(IsServer)    await ProcessServer(response);
-                else            await ProcessClient(response);
             }
 
             sendAttempts++;
@@ -376,6 +390,7 @@ public class NetworkManager : MonoBehaviour
     /// </summary>
     /// <returns>Returns the data read if valid, null if otherwise </returns>
     private async Task<string> ReadMessage(){
+        Debug.Log("[NETWORK-DEBUG]: Awaiting some message begin");
 
         var buffer = new byte[1_024];
         var received = await _connectionSocket.ReceiveAsync(buffer, SocketFlags.None);
@@ -442,6 +457,7 @@ public class NetworkManager : MonoBehaviour
         _appHandshakeVerified = false;
     
         _shouldCloseConnection = false;
+        _receivedAckCount = 0;
 
 
     }

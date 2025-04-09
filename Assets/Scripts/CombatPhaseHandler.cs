@@ -74,7 +74,7 @@ public class CombatPhaseHandler : MonoBehaviour
 
         // Keep playing rounds until the combat should end
         while(!ShouldCombatEnd()){
-            Debug.Log($"Current Combat Phase: {_currentPhase}");
+            // Debug.Log($"Current Combat Phase: {_currentPhase}");
             if(!IsRoundPlaying) StartCoroutine(PlayRound());
             yield return new WaitForEndOfFrame();
         }

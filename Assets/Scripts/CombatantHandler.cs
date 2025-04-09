@@ -79,7 +79,9 @@ public class CombatantHandler : MonoBehaviour
     }
 
     public bool HasEnemyTeam(){
+        if(_enemyTeam.Count <= 0 ) return false; 
         foreach(Combatant unit in _enemyTeam){
+            Debug.Log($"[COMBTATNTS]: Enemy Team unit: {unit.UnitTag}");
             if(String.IsNullOrEmpty(unit.UnitTag))
                 return false;
         }
@@ -101,7 +103,13 @@ public class CombatantHandler : MonoBehaviour
         MovesSubmissionStruct submission = new();
         submission.MoveSubmissions = new();
         foreach(Combatant unit in _playerTeam){
-            submission.MoveSubmissions.Add(new(unit));
+            MovesSubmissionStruct.MoveSubmission submitUnit = new();
+            
+            submitUnit.UnitTag = unit.UnitTag;
+            submitUnit.MoveTag = unit.MoveTag;
+            submitUnit.TargetSlotTag = unit.TargetSlotTag;
+
+            submission.MoveSubmissions.Add(submitUnit);
         }
 
         return submission;

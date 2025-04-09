@@ -37,10 +37,12 @@ public class CombatManager : MonoBehaviour {
     }
 
     public bool HasEnemyTeamBeenSubmitted(){
+        Debug.Log($"[COMBATMANAGER]: Has Enemy Team {_combatantHandler.HasEnemyTeam()}");
         return _combatantHandler.HasEnemyTeam();
     }
 
     public void SubmitEnemyMoves(MovesSubmissionStruct moves){
+        Debug.Log($"[MOVES]: Submitted moves: {moves}");
         int count = moves.MoveSubmissions.Count;
         for(int i = 0; i < count; i++){
 
