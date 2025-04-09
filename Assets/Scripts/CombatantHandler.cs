@@ -71,6 +71,8 @@ public class CombatantHandler : MonoBehaviour
                 IsAlly = isAlly
             };
 
+            Debug.Log($"[COMBATANTS]: Registered {newUnit.UnitTag}, {newUnit.Level}. Ally? {isAlly}");
+
             if (isAlly) _playerTeam.Add(newUnit);
             else _enemyTeam.Add(newUnit);
         }

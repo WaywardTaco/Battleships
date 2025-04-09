@@ -100,21 +100,36 @@ public class GameMenus : MonoBehaviour{
         _serverConnectMenu.SetActive(true);
         
         Task<bool> task = NetworkManager.Instance.StartServer(_serverPortNum);
+        Debug.Log("[NETWORK-DEBUG]: Starting server");
         yield return new WaitUntil(() => task.IsCompleted);
         if(task.Result){
+            Debug.Log("[NETWORK-DEBUG]: Server started");
             Task<bool> task2 = CombatManager.Instance.SubmitTeam(_localTeam, true);
+            Debug.Log("[NETWORK-DEBUG]: Sending team");
             yield return new WaitUntil(() => task2.IsCompleted);
             if(!task2.Result){
+                Debug.Log("[NETWORK-DEBUG]: Team send fail");
                 GoToServerMenu();
                 yield break;
             }
 
+            Debug.Log("[NETWORK-DEBUG]: Team send success, awaiting enemy team submit ");
+
+            int awaitingTeamStartTime = DateTime.Now.Millisecond;
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
+                if(DateTime.Now.Millisecond - awaitingTeamStartTime > 6000){
+                    Debug.Log("[NETWORK-DEBUG]: Enemy team send timeout");
+                    GoToClientMenu();
+                    yield break;
+                }
+
                 yield return new WaitForEndOfFrame();
             }
+            Debug.Log("[NETWORK-DEBUG]: Enemy team received, starting combat");
             CloseAllMenus();
             CombatManager.Instance.StartCombat();
         } else {
+            Debug.Log("[NETWORK-DEBUG]: Server failed to start");
             GoToServerMenu();
         }
     }
@@ -130,21 +145,36 @@ public class GameMenus : MonoBehaviour{
         _clientConnectMenu.SetActive(true);
 
         Task<bool> task = NetworkManager.Instance.ConnectBattle(_clientServerName, _clientPortNum);
+        Debug.Log("[NETWORK-DEBUG]: Attempt to connect to server");
         yield return new WaitUntil(() => task.IsCompleted);
         if(task.Result){
+            Debug.Log("[NETWORK-DEBUG]: Successfully connected to server");
             Task<bool> task2 = CombatManager.Instance.SubmitTeam(_localTeam, true);
+            Debug.Log("[NETWORK-DEBUG]: Sending team");
             yield return new WaitUntil(() => task2.IsCompleted);
             if(!task2.Result){
+                Debug.Log("[NETWORK-DEBUG]: Team sending fail");
                 GoToClientMenu();
                 yield break;
             }
 
+            Debug.Log("[NETWORK-DEBUG]: Team sending success, waiting for enemy team");
+
+            int awaitingTeamStartTime = DateTime.Now.Millisecond;
             while(!CombatManager.Instance.HasEnemyTeamBeenSubmitted()){
+                if(DateTime.Now.Millisecond - awaitingTeamStartTime > 6000){
+                    Debug.Log("[NETWORK-DEBUG]: Enemy team timeout");
+                    GoToClientMenu();
+                    yield break;
+                }
+                
                 yield return new WaitForEndOfFrame();
             }
+            Debug.Log("[NETWORK-DEBUG]: Enemy team received, starting combat");
             CloseAllMenus();
             CombatManager.Instance.StartCombat();
         } else {
+            Debug.Log("[NETWORK-DEBUG]: Server failed to start");
             GoToClientMenu();
         }
     }

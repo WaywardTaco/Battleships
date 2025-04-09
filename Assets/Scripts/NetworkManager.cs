@@ -199,6 +199,8 @@ public class NetworkManager : MonoBehaviour
 
     /* PROCESSING MESSAGES RECEIVED */
     private async Task ProcessServer(string response){
+        Debug.Log($"[NETWORK-DEBUG]: Processing server received: {response}");
+
         if(!_appHandshakeVerified){
             if(response.CompareTo(SYN) == 0)
                 _appHandshakeVerified = await SendData(SYN_ACK);
@@ -216,31 +218,38 @@ public class NetworkManager : MonoBehaviour
         _ = SendData(ACK, false);
 
         /* SERVER SIDE RECEIVING GAME LOGIC */
-        switch(GetMessagePrefix(ref response)){
+        string prefix = GetMessagePrefix(response);
+        if(prefix == null) return;
+        
+        string trimmedResponse = TrimMessagePrefix(response, prefix);
+        switch(prefix){
             case TEAM:
                 
+                Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
                 TeamStruct team = null;
-                team = JsonConvert.DeserializeObject<TeamStruct>(response);
+                team = JsonConvert.DeserializeObject<TeamStruct>(trimmedResponse);
                 if(team == null) break;
 
                 _ = CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
 
+                Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
                 MovesSubmissionStruct moves = null;
-                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(response);
+                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(trimmedResponse);
                 if(moves == null) break;
 
                 CombatManager.Instance.SubmitEnemyMoves(moves);
                 break;
         }
 
-        Debug.Log($"[NETWORK-DEBUG]: Response was \"{response}\"");
 
         return;
     }
     
     private async Task ProcessClient(string response){
+        Debug.Log($"[NETWORK-DEBUG]: Processing client received: {response}");
+
         if(!_appHandshakeVerified) return;
 
         if(response.CompareTo(FIN) == 0){
@@ -253,34 +262,41 @@ public class NetworkManager : MonoBehaviour
         _ = SendData(ACK, false);
         
         /* CLIENT SIDE RECEIVING GAME LOGIC */
-        switch(GetMessagePrefix(ref response)){
+        string prefix = GetMessagePrefix(response);
+        if(prefix == null) return;
+        
+        string trimmedResponse = TrimMessagePrefix(response, prefix);
+        switch(prefix){
             case TEAM:
-            
+                Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
+                
                 TeamStruct team = null;
-                team = JsonConvert.DeserializeObject<TeamStruct>(response);
+                team = JsonConvert.DeserializeObject<TeamStruct>(trimmedResponse);
                 if(team == null) break;
 
                 _ = CombatManager.Instance.SubmitTeam(team, false);
                 break;
             case MOVES:
-
+                Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
+                
                 MovesSubmissionStruct moves = null;
-                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(response);
+                moves = JsonConvert.DeserializeObject<MovesSubmissionStruct>(trimmedResponse);
                 if(moves == null) break;
 
                 CombatManager.Instance.SubmitEnemyMoves(moves);
                 break;
             case STATUS:
-            
+                Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
+                
                 BattleStatusStruct battleStatus = null;
-                battleStatus = JsonConvert.DeserializeObject<BattleStatusStruct>(response);
+                battleStatus = JsonConvert.DeserializeObject<BattleStatusStruct>(trimmedResponse);
                 if(battleStatus == null) break;
 
                 CombatManager.Instance.UpdateStatus(battleStatus);
                 break;
         }
 
-        Debug.Log($"[NETWORK-DEBUG]: Response was \"{response}\"");
+        Debug.Log($"[NETWORK-DEBUG]: Response was \"{trimmedResponse}\"");
 
         return;
     }
@@ -317,7 +333,7 @@ public class NetworkManager : MonoBehaviour
                     return true;
                 }
 
-                if(IsServer)   await ProcessServer(response);
+                if(IsServer)    await ProcessServer(response);
                 else            await ProcessClient(response);
             }
 
@@ -339,12 +355,12 @@ public class NetworkManager : MonoBehaviour
 
                 if(handshakeType.CompareTo(SYN) == 0 && response.CompareTo(SYN_ACK) == 0){
                     Debug.Log($"[NETWORK-DEBUG]: Successful connection made");
-                    await SendData(ACK);
+                    await SendData(ACK, false);
                     return true;
                 } 
                 if(handshakeType.CompareTo(FIN) == 0 && response.CompareTo(FIN_ACK) == 0){
                     Debug.Log($"[NETWORK-DEBUG]: Successful terminated connection");
-                    await SendData(ACK);
+                    await SendData(ACK, false);
                     return true;
                 }
             }
@@ -395,11 +411,11 @@ public class NetworkManager : MonoBehaviour
             return null;
         }
 
-        response.Replace(EOM, "");
+        string modifiedResponse = response.Remove(response.IndexOf(EOM), EOM.Length);
         
         Debug.Log($"[NETWORK-DEBUG]: Read message: {response}");
 
-        return response;
+        return modifiedResponse;
     }
 
     /* HELPER FUNCTIONS */
@@ -417,6 +433,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     private void CleanupConnections(){
+        Debug.Log("[NETWORK-DEBUG]: Cleaning up connections");
         _connectionSocket = null;
         
         _welcomeSocket = null;
@@ -437,27 +454,28 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    private string GetMessagePrefix(ref string data){
+    private string GetMessagePrefix(string data){
         
         if (data.IndexOf(TEAM) > -1){
             Debug.Log("[NETWORK-DEBUG]: Team submit message received");
-            data.Replace(TEAM, "");
             return TEAM;
         }
         
         if (data.IndexOf(MOVES) > -1){
             Debug.Log("[NETWORK-DEBUG]: Moves submit message received");
-            data.Replace(MOVES, "");
             return MOVES;
         }
         
         if (data.IndexOf(STATUS) > -1){
             Debug.Log("[NETWORK-DEBUG]: Status submit message received");
-            data.Replace(STATUS, "");
             return STATUS;
         }
 
         return null;
+    }
+
+    private string TrimMessagePrefix(string data, string prefix){
+        return data.Remove(data.IndexOf(prefix), prefix.Length);
     }
 
     /* SINGLETON CODE */
