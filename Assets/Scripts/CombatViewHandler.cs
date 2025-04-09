@@ -39,8 +39,8 @@ public class CombatViewHandler : MonoBehaviour
     public void HoverSlot(CombatantSlot slot, bool isHoveredOn){
         _combatPanel.StatPopup.gameObject.SetActive(isHoveredOn);
         if(isHoveredOn){
-            _combatPanel.StatPopup.HpText.text = $"{slot.AssignedCombatant.CurrentHealth}/{slot.AssignedCombatant.MaxHP}";
-            _combatPanel.StatPopup.SpText.text = $"{slot.AssignedCombatant.CurrentStamina}/{slot.AssignedCombatant.MaxSP}";
+            _combatPanel.StatPopup.HpText.text = $"HP: {slot.AssignedCombatant.CurrentHealth}/{slot.AssignedCombatant.MaxHP}";
+            _combatPanel.StatPopup.SpText.text = $"SP: {slot.AssignedCombatant.CurrentStamina}/{slot.AssignedCombatant.MaxSP}";
         }
     }
 

@@ -263,12 +263,14 @@ public class CombatantHandler : MonoBehaviour
         int slotCount = _playerSlots.Count;
         for(int i = 0; i < slotCount && i < _playerTeam.Count; i++){
             _playerTeam[i].IsAlly = true;
+            _playerTeam[i].MySlotTag = _playerSlots[i].GetSlotTag();
             _playerTeam[i].Initialize();
             _playerSlots[i].UpdateCombatant(_playerTeam[i]);
         }
         slotCount = _enemySlots.Count;
         for(int i = 0; i < slotCount && i < _enemyTeam.Count; i++){
             _enemyTeam[i].IsAlly = false;
+            _enemyTeam[i].MySlotTag = _enemySlots[i].GetSlotTag();
             _enemyTeam[i].Initialize();
             _enemySlots[i].UpdateCombatant(_enemyTeam[i]);
         }

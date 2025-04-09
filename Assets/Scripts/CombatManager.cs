@@ -26,6 +26,10 @@ public class CombatManager : MonoBehaviour {
         _moveProcessor.FinishedMoveProcessCallback();
     }
 
+    public CombatantSlot GetSlot(String slotTag){
+        return _combatantHandler.GetCombatantSlot(slotTag);
+    }
+
     public async Task<bool> SubmitTeam(TeamStruct team, bool isAlly){
         List<Tuple<String, int>> handler = new();
         foreach(TeamStruct.TeamMember unit in team.Members){

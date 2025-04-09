@@ -12,6 +12,7 @@ using UnityEngine;
 
     public string UnitTag = "";
     public int Level = 10;
+    [HideInInspector] public string MySlotTag = "";
     [HideInInspector] public string MoveTag = "";
     [HideInInspector] public string TargetSlotTag = "";
     public int CurrentHealth = 0;
@@ -38,6 +39,10 @@ using UnityEngine;
     }
     public Sprite GetSprite(int index){
         return DataLoader.Instance.GetUnitSprite(Info.SpriteList[index]);
+    }
+
+    public CombatantSlot GetSlot(){
+        return CombatManager.Instance.GetSlot(MySlotTag);
     }
 
     public void Initialize(){
@@ -76,9 +81,14 @@ using UnityEngine;
     public void DealDamage(int amount){
         if(amount < 0) amount = 0;
 
-        if(CurrentHealth - amount > 0){
-            CurrentHealth -= amount;
-        } else {
+        if(CurrentHealth < amount)
+            amount = CurrentHealth;
+
+        CurrentHealth -= amount;
+
+        GetSlot().DealDamage(amount);
+
+        if(CurrentHealth <= 0){
             CurrentHealth = 0;
             HasDied = true;
         }

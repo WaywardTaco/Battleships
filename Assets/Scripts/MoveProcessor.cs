@@ -19,10 +19,19 @@ public class MoveProcessor : MonoBehaviour
         /* START PROCESSING MOVE CODE */
         Combatant target = combatantHandler.GetCombatantSlot(user.TargetSlotTag).AssignedCombatant;
 
-        if(user.IsAlly)
-            viewHandler.SetMoveFeedbackText($"Your {user.Info.UnitName} used {user.Move.MoveName} on {target.Info.UnitName}!");
-        else
-            viewHandler.SetMoveFeedbackText($"Your opponent's {user.Info.UnitName} used {user.Move.MoveName} on your {target.Info.UnitName}!");
+        if(user.IsAlly){
+            if(target.IsAlly)
+                viewHandler.SetMoveFeedbackText($"Your {user.Info.UnitName} used {user.Move.MoveName} on your {target.Info.UnitName}!");
+            else
+                viewHandler.SetMoveFeedbackText($"Your {user.Info.UnitName} used {user.Move.MoveName} on your opponent's {target.Info.UnitName}!");
+
+        }
+        else{
+            if(target.IsAlly)
+                viewHandler.SetMoveFeedbackText($"Your opponent's {user.Info.UnitName} used {user.Move.MoveName} on your {target.Info.UnitName}!");
+            else
+                viewHandler.SetMoveFeedbackText($"Your opponent's {user.Info.UnitName} used {user.Move.MoveName} on their {target.Info.UnitName}!");
+        }
         
         _isProcessingEffect = false;
 
@@ -47,6 +56,10 @@ public class MoveProcessor : MonoBehaviour
 
     public void FinishedMoveProcessCallback(){
         _isProcessingEffect = false;
+    }
+
+    public void StartExternalCoroutine(IEnumerator routine){
+        StartCoroutine(routine);
     }
 
     public bool IsMoveTargetValid(Combatant user, CombatantSlot slot){
