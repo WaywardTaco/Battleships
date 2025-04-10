@@ -197,6 +197,12 @@ public class NetworkManager : MonoBehaviour
     }
 
     private async Task SendCloseConnectionHandshake(){
+        if(_connectionSocket == null || !_appHandshakeVerified){
+            Debug.Log("[NETWORK]: No connection attached");
+            return;
+        }
+        
+
         if(await SendHandshake(FIN)){
             Debug.Log($"[NETWORK-DEBUG]: Connection properly terminated to {_connectionSocket.RemoteEndPoint}");
             await SendData(ACK, false);
@@ -270,8 +276,6 @@ public class NetworkManager : MonoBehaviour
     private async Task ProcessClient(string response){
         Debug.Log($"[NETWORK-DEBUG]: Processing client received: {response}");
 
-        if(!_appHandshakeVerified) return;
-
         if(response.CompareTo(FIN) == 0){
             await SendData(FIN_ACK);
             CloseConnection();
@@ -282,6 +286,8 @@ public class NetworkManager : MonoBehaviour
             _receivedAckCount++;
             return;
         }
+
+        if(!_appHandshakeVerified) return;
         _ = SendData(ACK, false);
         
         /* CLIENT SIDE RECEIVING GAME LOGIC */
