@@ -156,7 +156,8 @@ using UnityEngine;
             CurrentStamina = 0;
             
         CurrentStamina += amount;
-        GetSlot().AffectStamina(amount);
+        if(amount != 0)
+            GetSlot().AffectStamina(amount);
     }
 
     
