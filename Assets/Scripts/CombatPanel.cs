@@ -28,6 +28,12 @@ public class CombatPanel : MonoBehaviour, IPointerClickHandler
         public GameObject gameObject;
         public TMP_Text HpText;
         public TMP_Text SpText;
+        public GameObject BuffPanel;
+        public TMP_Text ATKStage;
+        public TMP_Text SPAStage;
+        public TMP_Text SPEStage;
+        public TMP_Text DEFStage;
+        public TMP_Text SPDStage;
     }
 
     public BattleInfoPanel InfoPanel;

@@ -42,6 +42,41 @@ public class CombatViewHandler : MonoBehaviour
         if(isHoveredOn){
             _combatPanel.StatPopup.HpText.text = $"HP: {slot.AssignedCombatant.CurrentHealth}/{slot.AssignedCombatant.MaxHP}";
             _combatPanel.StatPopup.SpText.text = $"SP: {slot.AssignedCombatant.CurrentStamina}/{slot.AssignedCombatant.MaxSP}";
+
+            if(slot.AssignedCombatant.HasStatStage){
+                
+                if(slot.AssignedCombatant.ATKStage >= 0)
+                    _combatPanel.StatPopup.ATKStage.text = $"+{slot.AssignedCombatant.ATKStage}ATK";
+                else _combatPanel.StatPopup.ATKStage.text = $"{slot.AssignedCombatant.ATKStage}ATK";
+                _combatPanel.StatPopup.ATKStage.gameObject.SetActive(slot.AssignedCombatant.ATKStage != 0);
+                
+                if(slot.AssignedCombatant.SPAStage >= 0)
+                    _combatPanel.StatPopup.SPAStage.text = $"+{slot.AssignedCombatant.SPAStage}SPA";
+                else _combatPanel.StatPopup.SPAStage.text = $"{slot.AssignedCombatant.SPAStage}SPA";
+                _combatPanel.StatPopup.SPAStage.gameObject.SetActive(slot.AssignedCombatant.SPAStage != 0);
+                
+                if(slot.AssignedCombatant.SPEStage >= 0)
+                    _combatPanel.StatPopup.SPEStage.text = $"+{slot.AssignedCombatant.SPEStage}SPE";
+                else _combatPanel.StatPopup.SPEStage.text = $"{slot.AssignedCombatant.SPEStage}SPE";
+                _combatPanel.StatPopup.SPEStage.gameObject.SetActive(slot.AssignedCombatant.SPEStage != 0);
+                
+                if(slot.AssignedCombatant.DEFStage >= 0)
+                    _combatPanel.StatPopup.DEFStage.text = $"+{slot.AssignedCombatant.DEFStage}DEF";
+                else _combatPanel.StatPopup.DEFStage.text = $"{slot.AssignedCombatant.DEFStage}DEF";
+                _combatPanel.StatPopup.DEFStage.gameObject.SetActive(slot.AssignedCombatant.DEFStage != 0);
+                
+                if(slot.AssignedCombatant.SPDStage >= 0)
+                    _combatPanel.StatPopup.SPDStage.text = $"+{slot.AssignedCombatant.SPDStage}SPD";
+                else _combatPanel.StatPopup.SPDStage.text = $"{slot.AssignedCombatant.SPDStage}SPD";
+                _combatPanel.StatPopup.SPDStage.gameObject.SetActive(slot.AssignedCombatant.SPDStage != 0);
+                
+                _combatPanel.StatPopup.BuffPanel.SetActive(true);
+            } else {
+                _combatPanel.StatPopup.BuffPanel.SetActive(false);
+            }
+
+        } else {
+            _combatPanel.StatPopup.BuffPanel.SetActive(false);
         }
     }
 

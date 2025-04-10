@@ -50,6 +50,18 @@ using UnityEngine;
         return CurrentStamina >= amount;
     }
 
+    public bool HasStatStage{
+        get {
+            if(ATKStage != 0) return true;
+            if(SPAStage != 0) return true;
+            if(DEFStage != 0) return true;
+            if(SPDStage != 0) return true;
+            if(SPEStage != 0) return true;
+
+            return false;
+        }
+    }
+
     public void AffectStat(string stat, int amount){
         
         int referenceStatStage = 0;
