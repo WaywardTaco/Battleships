@@ -1,0 +1,16 @@
+{
+  "Members": [
+    {
+      "UnitTag": "ArchMage",
+      "Level": 50
+    },
+    {
+      "UnitTag": "Swordsmaster",
+      "Level": 50
+    },
+    {
+      "UnitTag": "Shaman",
+      "Level": 50
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "MoveTag": "SwiftSlash",
+  "MoveName": "Swift Slash",
+  "MoveDescription": "A blindingly fast slash that often moves first",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 40,
+  "MovePriority": 2,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}

@@ -1,0 +1,18 @@
+{
+  "MoveTag": "OneWithNature",
+  "MoveName": "One With Nature",
+  "MoveDescription": "The user meditates deeply on the reality of nature and the world, bestowing 15SP from a renewed sense of peace to its target",
+  "MoveKind": "Special",
+  "MoveType": "Light",
+  "MoveTargets": [
+    "Ally",
+    "Self"
+  ],
+  "MoveEffect": [
+    "Recover"
+  ],
+  "MovePower": 15,
+  "MovePriority": 0,
+  "MoveCostBase": 3,
+  "MoveCostGrowthRate": 0.05
+}

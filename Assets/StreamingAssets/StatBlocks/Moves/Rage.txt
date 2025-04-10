@@ -1,0 +1,18 @@
+{
+  "MoveTag": "Rage",
+  "MoveName": "Rage",
+  "MoveDescription": "The user enters a rage, greatly increasing their own attack while risking their own safety",
+  "MoveKind": "Physical",
+  "MoveType": "Strike",
+  "MoveTargets": [
+    "Self"
+  ],
+  "MoveEffect": [
+    "BuffATK",
+    "DebuffDEF"
+  ],
+  "MovePower": 2,
+  "MovePriority": 1,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

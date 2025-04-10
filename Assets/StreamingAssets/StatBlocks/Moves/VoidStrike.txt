@@ -1,0 +1,18 @@
+{
+  "MoveTag": "VoidStrike",
+  "MoveName": "Void Strike",
+  "MoveDescription": "The user summons power of the void to strike the very soul of its target",
+  "MoveKind": "Special",
+  "MoveType": "Dark",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 50,
+  "MovePriority": 0,
+  "MoveCostBase": 4,
+  "MoveCostGrowthRate": 0.1
+}

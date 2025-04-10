@@ -1,0 +1,19 @@
+{
+  "MoveTag": "AbyssalGift",
+  "MoveName": "Abyssal Gift",
+  "MoveDescription": "The user touches either themselves or an ally to gift stamina from a forbidden origin, they recover 30SP but take damage",
+  "MoveKind": "Special",
+  "MoveType": "Dark",
+  "MoveTargets": [
+    "Ally",
+    "Self"
+  ],
+  "MoveEffect": [
+    "Attack",
+    "Recover"
+  ],
+  "MovePower": 30,
+  "MovePriority": 0,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}

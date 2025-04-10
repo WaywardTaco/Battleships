@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatViewHandler : MonoBehaviour
 {
@@ -74,10 +75,16 @@ public class CombatViewHandler : MonoBehaviour
                 continue;
             }
 
+            int moveCost = move.MoveCostBase + (int)((float)unit.Level * move.MoveCostGrowthRate);
+
             moveButton.AssignedMove = move;
             moveButton.MoveNameText.text = move.MoveName;
             moveButton.MoveCostText.text = 
-                $"{move.MoveCostBase + (int)((float)unit.Level * move.MoveCostGrowthRate)}SP";
+                $"{moveCost}SP";
+
+            if(moveButton.gameObject.TryGetComponent<Button>(out Button button)){
+                button.enabled = unit.HasEnoughSP(moveCost);
+            }
         }
     }
 

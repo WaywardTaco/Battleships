@@ -1,0 +1,19 @@
+{
+  "MoveTag": "Caltrops",
+  "MoveName": "Caltrops",
+  "MoveDescription": "The user lays some caltrops on its target, causing them to take a bit of damage and to be slowed down",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack",
+    "DebuffSPE"
+  ],
+  "MovePower": 1,
+  "MovePriority": 0,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}

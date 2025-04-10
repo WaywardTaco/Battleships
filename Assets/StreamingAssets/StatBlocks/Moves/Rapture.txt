@@ -1,0 +1,20 @@
+{
+  "MoveTag": "Rapture",
+  "MoveName": "Rapture",
+  "MoveDescription": "The user summons a powerful ethereal to cut at the soul of its target, reducing their attack, defense, and speed",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "DebuffATK",
+    "DebuffDEF",
+    "DebuffSPE"
+  ],
+  "MovePower": 1,
+  "MovePriority": -1,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

@@ -1,0 +1,22 @@
+{
+  "MoveTag": "ForestGift",
+  "MoveName": "Forest Gift",
+  "MoveDescription": "The user grants a multitude of buffs to its target through their command and connection to nature",
+  "MoveKind": "Special",
+  "MoveType": "Light",
+  "MoveTargets": [
+    "Single",
+    "Ally",
+    "Self"
+  ],
+  "MoveEffect": [
+    "BuffDEF",
+    "BuffSPD",
+    "BuffATK",
+    "BuffSPA"
+  ],
+  "MovePower": 1,
+  "MovePriority": -2,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

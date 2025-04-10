@@ -1,0 +1,18 @@
+{
+  "MoveTag": "FreezeRay",
+  "MoveName": "Freeze Ray",
+  "MoveDescription": "The user casts a powerful ray of frost to harm opponents",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Self"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 50,
+  "MovePriority": 0,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}

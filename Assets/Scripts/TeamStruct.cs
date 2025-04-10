@@ -8,10 +8,6 @@ using UnityEngine;
     [Serializable] public class TeamMember {
         public string UnitTag;
         public int Level;
-        public void loadCombatantInfo(Combatant combatant){
-            UnitTag = combatant.UnitTag;
-            Level = combatant.Level;
-        }
     }
     
     public List<TeamMember> Members;

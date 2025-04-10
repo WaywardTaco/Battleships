@@ -1,0 +1,18 @@
+{
+  "MoveTag": "BladeSlash",
+  "MoveName": "Blade Slash",
+  "MoveDescription": "The user expertly wields their blade to slash their target efficiently",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 50,
+  "MovePriority": 0,
+  "MoveCostBase": 0,
+  "MoveCostGrowthRate": 0.0
+}

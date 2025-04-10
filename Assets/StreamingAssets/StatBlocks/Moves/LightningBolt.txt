@@ -1,0 +1,18 @@
+{
+  "MoveTag": "LightningBolt",
+  "MoveName": "Lightning Bolt",
+  "MoveDescription": "The user summons a mighty bolt of lightning from the sky to strike down their opponents",
+  "MoveKind": "Special",
+  "MoveType": "Electric",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 90,
+  "MovePriority": 0,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

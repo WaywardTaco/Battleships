@@ -1,0 +1,34 @@
+{
+  "UnitTag": "Rogue",
+  "UnitName": "Skorvin the Rogue",
+  "HP_Base": 30,
+  "HP_Growth": 0.3,
+  "SP_Base": 75,
+  "SP_Growth": 0.6,
+  "ATK_Base": 50,
+  "ATK_Growth": 0.5,
+  "DEF_Base": 75,
+  "DEF_Growth": 0.6,
+  "SPA_Base": 40,
+  "SPA_Growth": 0.4,
+  "SPD_Base": 40,
+  "SPD_Growth": 0.4,
+  "SPE_Base": 100,
+  "SPE_Growth": 0.7,
+  "Resistances": [
+    "Fire",
+    "Slash",
+    "Strike"
+  ],
+  "Weaknesses": [],
+  "SpriteList": [
+    "Rogue.png",
+    "Rogue.png"
+  ],
+  "MoveList": [
+    "HiddenFist",
+    "SwiftSlash",
+    "CriticalStrike",
+    "Caltrops"
+  ]
+}

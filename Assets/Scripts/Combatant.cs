@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] public class Combatant {
+    private const int STAT_MAXSTAGE = 5;
     private const float ATK_STAGE_MULT = 0.5f;
     private const float SPA_STAGE_MULT = 0.5f;
     private const float DEF_STAGE_MULT = 0.5f;
@@ -43,6 +44,37 @@ using UnityEngine;
 
     public CombatantSlot GetSlot(){
         return CombatManager.Instance.GetSlot(MySlotTag);
+    }
+
+    public bool HasEnoughSP(int amount){
+        return CurrentStamina >= amount;
+    }
+
+    public void AffectStat(string stat, int amount){
+        
+        int referenceStatStage = 0;
+        switch(stat){
+            case "ATK": referenceStatStage = ATKStage; break;
+            case "SPA": referenceStatStage = SPAStage; break;
+            case "DEF": referenceStatStage = DEFStage; break;
+            case "SPD": referenceStatStage = SPDStage; break;
+            case "SPE": referenceStatStage = SPEStage; break;
+        }
+
+        if(referenceStatStage + amount > STAT_MAXSTAGE)
+            amount = STAT_MAXSTAGE - referenceStatStage;
+        if(referenceStatStage + amount < -STAT_MAXSTAGE)
+            amount = -STAT_MAXSTAGE - referenceStatStage;
+
+        switch(stat){
+            case "ATK": ATKStage += amount; break;
+            case "SPA": SPAStage += amount; break;
+            case "DEF": DEFStage += amount; break;
+            case "SPD": SPDStage += amount; break;
+            case "SPE": SPEStage += amount; break;
+        }
+
+        GetSlot().AffectStat(stat, amount);
     }
 
     public void Initialize(){
@@ -91,6 +123,7 @@ using UnityEngine;
         if(CurrentHealth <= 0){
             CurrentHealth = 0;
             HasDied = true;
+            GetSlot().DieAnim();
         }
     }
 
@@ -99,15 +132,34 @@ using UnityEngine;
 
         if(HasDied && !doesRevive) return;
 
-        if(CurrentHealth + amount < MaxHP){
-            CurrentHealth+= amount;
-        } else {
-            CurrentHealth = MaxHP;
-        }
+        if(CurrentHealth + amount > MaxHP)
+            amount = MaxHP - CurrentHealth;
+            
+        CurrentHealth += amount;
+        GetSlot().Heal(amount);
 
-        if(CurrentHealth > 0 && doesRevive) 
+        if(CurrentHealth > 0 && doesRevive){
+            GetSlot().ReviveAnim();
             HasDied = false;
+        }
     }
+
+    public void AffectStamina(int amount){
+
+        if(CurrentStamina + amount > MaxSP)
+            amount = MaxSP - CurrentHealth;
+        if(CurrentStamina + amount < 0)
+            amount = 0 - CurrentStamina;
+        if(CurrentStamina > MaxSP)
+            CurrentStamina = MaxSP;
+        if(CurrentStamina < 0)
+            CurrentStamina = 0;
+            
+        CurrentStamina += amount;
+        GetSlot().AffectStamina(amount);
+    }
+
+    
 
     public void UpdateMoveSubmission(MovesSubmissionStruct.MoveSubmission submission){
         if(UnitTag.CompareTo(submission.UnitTag) != 0) 

@@ -1,0 +1,18 @@
+{
+  "MoveTag": "Valor",
+  "MoveName": "Valor",
+  "MoveDescription": "The user stands proudly to remember their convictions, raising their physical and special attack",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Self"
+  ],
+  "MoveEffect": [
+    "BuffATK",
+    "BuffSPA"
+  ],
+  "MovePower": 1,
+  "MovePriority": 0,
+  "MoveCostBase": 6,
+  "MoveCostGrowthRate": 0.3
+}

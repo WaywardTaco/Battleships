@@ -1,0 +1,37 @@
+{
+  "UnitTag": "Barbarian",
+  "UnitName": "Crawford the Barbarian",
+  "HP_Base": 75,
+  "HP_Growth": 0.6,
+  "SP_Base": 75,
+  "SP_Growth": 0.6,
+  "ATK_Base": 100,
+  "ATK_Growth": 0.7,
+  "DEF_Base": 40,
+  "DEF_Growth": 0.4,
+  "SPA_Base": 40,
+  "SPA_Growth": 0.4,
+  "SPD_Base": 30,
+  "SPD_Growth": 0.3,
+  "SPE_Base": 50,
+  "SPE_Growth": 0.5,
+  "Resistances": [
+    "Light",
+    "Dark",
+    "Strike"
+  ],
+  "Weaknesses": [
+    "Slash",
+    "Fire"
+  ],
+  "SpriteList": [
+    "Barbarian.png",
+    "Barbarian.png"
+  ],
+  "MoveList": [
+    "Pummel",
+    "FlurryOfStrikes",
+    "Endurance",
+    "Rage"
+  ]
+}

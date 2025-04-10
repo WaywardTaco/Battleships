@@ -1,0 +1,37 @@
+{
+  "UnitTag": "Swordsmaster",
+  "UnitName": "Jethro the Swordsmaster",
+  "HP_Base": 50,
+  "HP_Growth": 0.5,
+  "SP_Base": 30,
+  "SP_Growth": 0.3,
+  "ATK_Base": 75,
+  "ATK_Growth": 0.6,
+  "DEF_Base": 100,
+  "DEF_Growth": 0.7,
+  "SPA_Base": 40,
+  "SPA_Growth": 0.4,
+  "SPD_Base": 75,
+  "SPD_Growth": 0.6,
+  "SPE_Base": 40,
+  "SPE_Growth": 0.4,
+  "Resistances": [
+    "Slash",
+    "Strike",
+    "Light"
+  ],
+  "Weaknesses": [
+    "Electric",
+    "Dark"
+  ],
+  "SpriteList": [
+    "Swordsmaster.png",
+    "Swordsmaster.png"
+  ],
+  "MoveList": [
+    "BladeSlash",
+    "StrongSwing",
+    "Valor",
+    "Reposte"
+  ]
+}

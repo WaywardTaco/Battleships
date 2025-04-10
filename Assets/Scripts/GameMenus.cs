@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameMenus : MonoBehaviour{
-    [SerializeField] private TeamStruct _localTeam;
+
+    private const string LOCAL_TEAM_FILEPATH = "/LocalTeams/Team1.txt";
+    [SerializeField] private TeamStruct _localTeam = new();
 
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _serverMenu;
@@ -32,6 +36,10 @@ public class GameMenus : MonoBehaviour{
 
     void Start()
     {
+        if(_localTeam.Members.Count <= 0){
+            LoadLocalTeam();
+        }
+
         GoToMainMenu();
     }
 
@@ -185,6 +193,19 @@ public class GameMenus : MonoBehaviour{
             Debug.Log("[NETWORK-DEBUG]: Server failed to start");
             GoToClientMenu();
         }
+    }
+
+    private void LoadLocalTeam(){
+        string[] importLines = File.ReadAllLines(Application.streamingAssetsPath + LOCAL_TEAM_FILEPATH);
+        string importString = string.Join("", importLines);
+
+        try {
+            _localTeam = JsonConvert.DeserializeObject<TeamStruct>(importString);
+
+        } catch (Exception e){
+            Debug.LogError($"[TEAM ERROR]: {e.ToString()}");
+        }
+        
     }
     
     public void GoToWinMenu(){

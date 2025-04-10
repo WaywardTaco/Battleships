@@ -3798,6 +3798,34 @@ MonoBehaviour:
   _moveTagEffects:
   - MoveTag: Attack
     MoveEffect: {fileID: 11400000, guid: f232ee36878b99a4598fddb9adaeb3c4, type: 2}
+  - MoveTag: Heal
+    MoveEffect: {fileID: 11400000, guid: 8e9bf162304304247aa3441bf1b36687, type: 2}
+  - MoveTag: Recoil
+    MoveEffect: {fileID: 11400000, guid: d0bba182d5a6e7847abbb14aada58699, type: 2}
+  - MoveTag: Revive
+    MoveEffect: {fileID: 11400000, guid: 3144c9e694e102a4f990bbec530e422d, type: 2}
+  - MoveTag: BuffATK
+    MoveEffect: {fileID: 11400000, guid: 627bc8b9a4043524cbab9da2fbc754c7, type: 2}
+  - MoveTag: BuffDEF
+    MoveEffect: {fileID: 11400000, guid: ad1b6bd887163204789371819d4a1066, type: 2}
+  - MoveTag: BuffSPA
+    MoveEffect: {fileID: 11400000, guid: 80c023b36c4478b4794fe59b7818295b, type: 2}
+  - MoveTag: BuffSPD
+    MoveEffect: {fileID: 11400000, guid: 28a4a7a6bf5159c409ab7a6426eddee2, type: 2}
+  - MoveTag: BuffSPE
+    MoveEffect: {fileID: 11400000, guid: bec185531ae424745ab245b7842706a7, type: 2}
+  - MoveTag: DebuffATK
+    MoveEffect: {fileID: 11400000, guid: b7f3cb0e45bcd634ebd9b9dc9d3760d2, type: 2}
+  - MoveTag: DebuffDEF
+    MoveEffect: {fileID: 11400000, guid: c879daa22a3fedd4e821f7eeca9b4024, type: 2}
+  - MoveTag: DebuffSPA
+    MoveEffect: {fileID: 11400000, guid: e758a45077137584cbe3226c0ea6b7a4, type: 2}
+  - MoveTag: DebuffSPD
+    MoveEffect: {fileID: 11400000, guid: 1804c1ff1be355b4c91aba10f2a2aeb9, type: 2}
+  - MoveTag: DebuffSPE
+    MoveEffect: {fileID: 11400000, guid: f5311f0e1dae4d245a4e214155b865c5, type: 2}
+  - MoveTag: Recover
+    MoveEffect: {fileID: 11400000, guid: d196d54e87c9caa4e9f5eb893be88345, type: 2}
 --- !u!114 &480761358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3851,6 +3879,7 @@ MonoBehaviour:
   _playerTeam:
   - UnitTag: Frank
     Level: 10
+    MySlotTag: 
     MoveTag: 
     TargetSlotTag: 
     CurrentHealth: 0
@@ -3865,6 +3894,7 @@ MonoBehaviour:
     HasMoved: 0
   - UnitTag: Frank
     Level: 10
+    MySlotTag: 
     MoveTag: 
     TargetSlotTag: 
     CurrentHealth: 0
@@ -3879,6 +3909,7 @@ MonoBehaviour:
     HasMoved: 0
   - UnitTag: Frank
     Level: 10
+    MySlotTag: 
     MoveTag: 
     TargetSlotTag: 
     CurrentHealth: 0
@@ -5807,13 +5838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _localTeam:
-    Members:
-    - UnitTag: Frank
-      Level: 10
-    - UnitTag: Frank
-      Level: 20
-    - UnitTag: Frank
-      Level: 15
+    Members: []
   _mainMenu: {fileID: 1523252456}
   _serverMenu: {fileID: 219836319}
   _serverPortNumField: {fileID: 1618210850}

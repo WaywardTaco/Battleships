@@ -1,0 +1,37 @@
+{
+  "UnitTag": "ArchMage",
+  "UnitName": "Jeva the Archmage",
+  "HP_Base": 40,
+  "HP_Growth": 0.4,
+  "SP_Base": 75,
+  "SP_Growth": 0.6,
+  "ATK_Base": 40,
+  "ATK_Growth": 0.4,
+  "DEF_Base": 30, 
+  "DEF_Growth": 0.3,
+  "SPA_Base": 75,
+  "SPA_Growth": 0.6,
+  "SPD_Base": 100,
+  "SPD_Growth": 0.7,
+  "SPE_Base": 50,
+  "SPE_Growth": 0.5,
+  "Resistances": [
+    "Fire",
+    "Ice",
+    "Electric"
+  ],
+  "Weaknesses": [
+    "Strike",
+    "Slash"
+  ],
+  "SpriteList": [
+    "ArchMage.png",
+    "ArchMage.png"
+  ],
+  "MoveList": [
+    "Fireball",
+    "FreezeRay",
+    "LightningBolt",
+    "Contemplate"
+  ]
+}

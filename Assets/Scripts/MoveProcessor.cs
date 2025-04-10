@@ -34,6 +34,11 @@ public class MoveProcessor : MonoBehaviour
         }
         
         _isProcessingEffect = false;
+        
+        // SPEND SP
+        
+        int moveCost = user.Move.MoveCostBase + (int)((float)user.Level * user.Move.MoveCostGrowthRate);
+        user.AffectStamina(-moveCost);
 
         /* PROCESSING ALL MOVE EFFECTS CODE */
         for(int workingEffectIndex = 0; workingEffectIndex < user.Move.MoveEffect.Count; workingEffectIndex++){

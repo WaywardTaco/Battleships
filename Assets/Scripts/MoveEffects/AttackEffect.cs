@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Effect", menuName = "Scriptables/MoveEffects/Attack", order = 0)]
 public class Attack : IMoveEffect {
-    private const float MOVETIME = 0.5f;
+    private const float MOVETIME = 0.3f;
     public override void Use(Combatant user, Combatant target, MoveProcessor processor){
         
         bool isSpecial = false;
@@ -14,9 +14,9 @@ public class Attack : IMoveEffect {
 
         float power;
         if(!isSpecial)
-            power = user.Move.MovePower + user.CurrentAttack() - target.CurrentDefense();
+            power = user.Move.MovePower + user.CurrentAttack() - target.CurrentDefense() / 2.0f;
         else
-            power = user.Move.MovePower + user.CurrentSpecialAttack() - target.CurrentSpecialDefense();
+            power = user.Move.MovePower + user.CurrentSpecialAttack() - target.CurrentSpecialDefense() / 2.0f;
 
         if(target.Info.Resistances.Contains(user.Move.MoveType)) power *= 0.5f;
         if(target.Info.Weaknesses.Contains(user.Move.MoveType)) power *= 2.0f;

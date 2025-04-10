@@ -1,0 +1,18 @@
+{
+  "MoveTag": "Fireball",
+  "MoveName": "Fireball",
+  "MoveDescription": "The user conjures a mote of fire towards their target",
+  "MoveKind": "Special",
+  "MoveType": "Fire",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 40,
+  "MovePriority": 0,
+  "MoveCostBase": 4,
+  "MoveCostGrowthRate": 0.05
+}

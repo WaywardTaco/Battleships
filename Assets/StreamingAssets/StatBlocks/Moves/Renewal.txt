@@ -1,0 +1,18 @@
+{
+  "MoveTag": "Renewal",
+  "MoveName": "Renewal",
+  "MoveDescription": "The user targets an ally and bestows upon them 25HP, reviving any fallen allies",
+  "MoveKind": "Special",
+  "MoveType": "Light",
+  "MoveTargets": [
+    "Ally",
+    "DeadAlly"
+  ],
+  "MoveEffect": [
+    "Revive"
+  ],
+  "MovePower": 25,
+  "MovePriority": 0,
+  "MoveCostBase": 6,
+  "MoveCostGrowthRate": 0.3
+}

@@ -1,0 +1,22 @@
+{
+  "MoveTag": "ShadowCurse",
+  "MoveName": "Shadow Curse",
+  "MoveDescription": "The user casts a curse on the target, recovering 1HP, boosting defense and special defense, and lowering speed. This will also revive allies",
+  "MoveKind": "Special",
+  "MoveType": "Dark",
+  "MoveTargets": [
+    "Single",
+    "Ally",
+    "DeadAlly"
+  ],
+  "MoveEffect": [
+    "Revive",
+    "BuffDEF",
+    "BuffSPD",
+    "DebuffSPE"
+  ],
+  "MovePower": 1,
+  "MovePriority": 0,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

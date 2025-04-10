@@ -1,0 +1,18 @@
+{
+  "MoveTag": "CriticalStrike",
+  "MoveName": "Critical Strike",
+  "MoveDescription": "The user expertly targets their target's vital points to deal a devastating blow",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 90,
+  "MovePriority": 0,
+  "MoveCostBase": 6,
+  "MoveCostGrowthRate": 0.3
+}

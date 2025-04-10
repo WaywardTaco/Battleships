@@ -1,0 +1,37 @@
+{
+  "UnitTag": "DarkMage",
+  "UnitName": "Volok the Dark Mage",
+  "HP_Base": 30,
+  "HP_Growth": 0.3,
+  "SP_Base": 75,
+  "SP_Growth": 0.6,
+  "ATK_Base": 40,
+  "ATK_Growth": 0.4,
+  "DEF_Base": 50,
+  "DEF_Growth": 0.5,
+  "SPA_Base": 100,
+  "SPA_Growth": 0.7,
+  "SPD_Base": 75,
+  "SPD_Growth": 0.6,
+  "SPE_Base": 40,
+  "SPE_Growth": 0.4,
+  "Resistances": [
+    "Ice",
+    "Electric",
+    "Dark"
+  ],
+  "Weaknesses": [
+    "Strike",
+    "Light"
+  ],
+  "SpriteList": [
+    "DarkMage.png",
+    "DarkMage.png"
+  ],
+  "MoveList": [
+    "VoidStrike",
+    "ShadowCurse",
+    "Rapture",
+    "AbyssalGift"
+  ]
+}

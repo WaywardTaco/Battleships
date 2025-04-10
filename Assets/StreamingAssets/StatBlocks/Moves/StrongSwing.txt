@@ -1,0 +1,18 @@
+{
+  "MoveTag": "StrongSwing",
+  "MoveName": "Strong Swing",
+  "MoveDescription": "The user musters up their full strength to deal a devastating sword swing",
+  "MoveKind": "Physical",
+  "MoveType": "Slash",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack"
+  ],
+  "MovePower": 90,
+  "MovePriority": 0,
+  "MoveCostBase": 7,
+  "MoveCostGrowthRate": 0.5
+}

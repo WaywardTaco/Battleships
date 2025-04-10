@@ -1,0 +1,19 @@
+{
+  "MoveTag": "FlurryOfStrike",
+  "MoveName": "Flurry Of Strikes",
+  "MoveDescription": "The user repeatedly strikes their target down with ferocity but receiving some recoil",
+  "MoveKind": "Physical",
+  "MoveType": "Strike",
+  "MoveTargets": [
+    "Single",
+    "Ally"
+  ],
+  "MoveEffect": [
+    "Attack",
+    "Recoil"
+  ],
+  "MovePower": 50,
+  "MovePriority": 0,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}

@@ -1,0 +1,16 @@
+{
+  "Members": [
+    {
+      "UnitTag": "Rogue",
+      "Level": 50
+    },
+    {
+      "UnitTag": "Barbarian",
+      "Level": 50
+    },
+    {
+      "UnitTag": "DarkMage",
+      "Level": 50
+    }
+  ]
+}

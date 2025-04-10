@@ -1,0 +1,18 @@
+{
+  "MoveTag": "Endurance",
+  "MoveName": "Endurance",
+  "MoveDescription": "The user psyches themselves up to endure a powerful offense",
+  "MoveKind": "Physical",
+  "MoveType": "Strike",
+  "MoveTargets": [
+    "Self"
+  ],
+  "MoveEffect": [
+    "BuffDEF",
+    "BuffSPD"
+  ],
+  "MovePower": 1,
+  "MovePriority": 1,
+  "MoveCostBase": 5,
+  "MoveCostGrowthRate": 0.2
+}
