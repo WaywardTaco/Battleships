@@ -46,6 +46,7 @@ public class NetworkManager : MonoBehaviour
     public async Task SendMoves(MovesSubmissionStruct moves){
         if(moves == null) return;
         string data = JsonConvert.SerializeObject(moves, Formatting.None);
+        Debug.Log($"[NETWORK-DEBUG]: Sending moves {data}");
 
         if (string.IsNullOrEmpty(data)) return;
         string toSend = MOVES + data + EOM;

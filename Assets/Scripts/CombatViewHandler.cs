@@ -117,8 +117,8 @@ public class CombatViewHandler : MonoBehaviour
             moveButton.MoveCostText.text = 
                 $"{moveCost}SP";
 
-            if(moveButton.gameObject.TryGetComponent<Button>(out Button button)){
-                button.enabled = unit.HasEnoughSP(moveCost);
+            if(moveButton.gameObject.TryGetComponent(out Button button)){
+                button.interactable = unit.HasEnoughSP(moveCost);
             }
         }
     }
