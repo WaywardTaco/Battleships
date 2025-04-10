@@ -103,7 +103,12 @@ public class NetworkManager : MonoBehaviour
         // Listen to one connection request, assign to connection socket, and verify application level handshake
         _welcomeSocket.Listen(1);
         Task<Socket> task = _welcomeSocket.AcceptAsync();
-        await task;
+        try{
+            await task;
+        } catch {
+            return false;
+        }
+        
         if(task.IsCompletedSuccessfully)
             _connectionSocket = task.Result;
 
