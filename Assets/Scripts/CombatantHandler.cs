@@ -133,12 +133,40 @@ public class CombatantHandler : MonoBehaviour
     public BattleStatusStruct ExtractBattleStatus(){
         BattleStatusStruct battleStatus = new();
         battleStatus.ServerCombatantStatuses = new();
-        foreach (Combatant unit in _playerTeam)
-            battleStatus.ServerCombatantStatuses.Add(new(unit));
+        foreach (Combatant unit in _playerTeam){
+            BattleStatusStruct.CombatantStatus status = new()
+            {
+                UnitTag = unit.UnitTag,
+                CurrentHealth = unit.CurrentHealth,
+                CurrentStamina = unit.CurrentStamina,
+                ATKStage = unit.ATKStage,
+                SPAStage = unit.SPAStage,
+                DEFStage = unit.DEFStage,
+                SPDStage = unit.SPDStage,
+                SPEStage = unit.SPEStage,
+                HasDied = unit.HasDied
+            };
+
+            battleStatus.ServerCombatantStatuses.Add(status);
+        }
 
         battleStatus.ClientCombatantStatuses = new();
-        foreach (Combatant unit in _enemyTeam)
-            battleStatus.ClientCombatantStatuses.Add(new(unit));
+        foreach (Combatant unit in _enemyTeam){
+            BattleStatusStruct.CombatantStatus status = new()
+            {
+                UnitTag = unit.UnitTag,
+                CurrentHealth = unit.CurrentHealth,
+                CurrentStamina = unit.CurrentStamina,
+                ATKStage = unit.ATKStage,
+                SPAStage = unit.SPAStage,
+                DEFStage = unit.DEFStage,
+                SPDStage = unit.SPDStage,
+                SPEStage = unit.SPEStage,
+                HasDied = unit.HasDied
+            };
+
+            battleStatus.ClientCombatantStatuses.Add(status);
+        }
 
         return battleStatus;
     }

@@ -14,17 +14,6 @@ public class BattleStatusStruct
         public int SPDStage = 0;
         public int SPEStage = 0;
         public bool HasDied = false;
-        public CombatantStatus(Combatant combatant){
-            UnitTag = combatant.UnitTag;
-            CurrentHealth = combatant.CurrentHealth;
-            CurrentStamina = combatant.CurrentStamina;
-            ATKStage = combatant.ATKStage;
-            SPAStage = combatant.SPAStage;
-            DEFStage = combatant.DEFStage;
-            SPDStage = combatant.SPDStage;
-            SPEStage = combatant.SPEStage;
-            HasDied = combatant.HasDied;
-        }
     }
 
     public List<CombatantStatus> ServerCombatantStatuses;
