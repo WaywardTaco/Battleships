@@ -73,7 +73,7 @@ public class CombatManager : MonoBehaviour {
             Combatant unit = _combatantHandler.GetCombatant(i, false);
 
             _combatantHandler.SubmitMove(unit, DataLoader.Instance.GetMoveData(move.MoveTag));
-            _combatantHandler.SubmitTarget(unit, _combatantHandler.GetCombatantSlot(ConvertRemoteSlotTagToLocal(move.TargetSlotTag)));
+            _combatantHandler.SubmitTarget(unit, ConvertRemoteSlotTagToLocal(move.TargetSlotTag));
         }
 
         _storedEnemyMoves = null;
@@ -176,7 +176,7 @@ public class CombatManager : MonoBehaviour {
         }
 
         Debug.Log("[COMBAT]: Valid Target Submitted " + slot.AssignedCombatant);
-        _combatantHandler.SubmitTarget(_phaseHandler.TurnUnit, slot);
+        _combatantHandler.SubmitTarget(_phaseHandler.TurnUnit, slot.GetSlotTag());
     }
 
     public static CombatManager Instance { get; private set;}

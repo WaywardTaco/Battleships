@@ -80,6 +80,7 @@ public class NetworkManager : MonoBehaviour
     /// <param name="portNumber">The port to run the server on</param>
     /// <returns>Returns true if a server was successfully created</returns>
     public async Task<bool> StartServer(int portNumber){
+        _shouldCloseConnection = false;
 
         // Create endpoint then socket on this own system's Address, then bind
         IPEndPoint endpoint = await CreateEndpoint(Dns.GetHostName(), portNumber);
@@ -129,6 +130,7 @@ public class NetworkManager : MonoBehaviour
     /// <param name="portNumber">The port on the server to find the server</param>
     /// <returns></returns>
     public async Task<bool> ConnectBattle(string hostname, int portNumber){
+        _shouldCloseConnection = false;
         
         // Create an endpoint to the server and attach it to connection of the client
         IPEndPoint endpoint = await CreateEndpoint(hostname, portNumber);
@@ -177,7 +179,8 @@ public class NetworkManager : MonoBehaviour
         
         // Closing server welcome socket
         Debug.Log($"[NETWORK-DEBUG]: Closing server at {_welcomeSocket.LocalEndPoint}");
-        await SendCloseConnectionHandshake();
+        if(_appHandshakeVerified)
+            await SendCloseConnectionHandshake();
         _welcomeSocket.Close();
         CleanupConnections();
     }

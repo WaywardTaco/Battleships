@@ -97,8 +97,11 @@ public class CombatantHandler : MonoBehaviour
             unit.MoveTag = "";
     }
 
-    public void SubmitTarget(Combatant unit, CombatantSlot target){
-        unit.TargetSlotTag = target.GetSlotTag();
+    public void SubmitTarget(Combatant unit, String target){
+        if(unit == null) return;
+        if(String.IsNullOrWhiteSpace(target)) return;
+
+        unit.TargetSlotTag = target;
         if(unit.IsAlly) _playerSubmittedMovesCount++;
         else            _enemySubmittedMovesCount++;
     }

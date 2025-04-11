@@ -1,5 +1,5 @@
 {
-  "MoveTag": "FlurryOfStrike",
+  "MoveTag": "FlurryOfStrikes",
   "MoveName": "Flurry Of Strikes",
   "MoveDescription": "The user repeatedly strikes their target down with ferocity but receiving some recoil",
   "MoveKind": "Physical",
