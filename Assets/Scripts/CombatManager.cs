@@ -13,6 +13,14 @@ public class CombatManager : MonoBehaviour {
     [SerializeField] private MoveProcessor _moveProcessor;
     [SerializeField] private CombatViewHandler _viewHandler;
 
+    private MovesSubmissionStruct _storedEnemyMoves;
+    private BattleStatusStruct _storedBattleStatus;
+    public bool HasStoredBattleStatus {
+        get {
+            return _storedBattleStatus != null;
+        }
+    }
+
     public void StartCombat(){
         if(_phaseHandler.IsCombatActive){
             Debug.LogWarning("[WARN]: Trying to start combat while combat is running");
@@ -51,15 +59,24 @@ public class CombatManager : MonoBehaviour {
 
     public void SubmitEnemyMoves(MovesSubmissionStruct moves){
         Debug.Log($"[MOVES]: Submitted moves: {moves}");
-        int count = moves.MoveSubmissions.Count;
+        _storedEnemyMoves = moves;
+    }
+
+    public void ProcStoredEnemyMoves(){
+
+        if(_storedEnemyMoves == null) return;
+
+        int count = _storedEnemyMoves.MoveSubmissions.Count;
         for(int i = 0; i < count; i++){
 
-            MovesSubmissionStruct.MoveSubmission move = moves.MoveSubmissions[i];
+            MovesSubmissionStruct.MoveSubmission move = _storedEnemyMoves.MoveSubmissions[i];
             Combatant unit = _combatantHandler.GetCombatant(i, false);
 
             _combatantHandler.SubmitMove(unit, DataLoader.Instance.GetMoveData(move.MoveTag));
             _combatantHandler.SubmitTarget(unit, _combatantHandler.GetCombatantSlot(ConvertRemoteSlotTagToLocal(move.TargetSlotTag)));
         }
+
+        _storedEnemyMoves = null;
     }
 
     public void SendLocalPlayerMoves(){
@@ -84,7 +101,13 @@ public class CombatManager : MonoBehaviour {
     }
 
     public void UpdateStatus(BattleStatusStruct battleStatus){
-        _combatantHandler.UpdateStatus(battleStatus);
+        _storedBattleStatus = battleStatus;
+    }
+
+    public void ProcStoredBattleStatus(){
+        if(_storedBattleStatus == null) return;
+        _combatantHandler.UpdateStatus(_storedBattleStatus);
+        _storedBattleStatus = null;
     }
 
     public void UpdateView(CombatPhase currentPhase){

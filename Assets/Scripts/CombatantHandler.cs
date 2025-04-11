@@ -90,7 +90,11 @@ public class CombatantHandler : MonoBehaviour
     }
 
     public void SubmitMove(Combatant unit, MoveData move){
-        unit.MoveTag = move.MoveTag;
+        if(unit == null) return;
+        if(move != null)
+            unit.MoveTag = move.MoveTag;
+        else 
+            unit.MoveTag = "";
     }
 
     public void SubmitTarget(Combatant unit, CombatantSlot target){
