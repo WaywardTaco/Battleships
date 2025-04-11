@@ -43,6 +43,10 @@ public class GameMenus : MonoBehaviour{
         GoToMainMenu();
     }
 
+    public void CloseGame(){
+        Application.Quit();
+    }
+
     private void CloseAllMenus(){
         _mainMenu.SetActive(false);
         _serverMenu.SetActive(false);
